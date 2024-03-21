@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+    <title>Title</title>
+
+    <link rel="stylesheet" href="/css/mystyle.css" >
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.3/dist/css/bootstrap.css}">
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap-icons/1.11.3/font/bootstrap-icons.css}">
+
+</head>
+<body>
+<div class="container-fluid py-4">
+    <div class="row justify-content-center">
+        <div class="col">
+            <nav aria-label="breadcrumb" class="bg-light rounded-3 p-3">
+                <ol class="breadcrumb mb-0">
+                     <li class="breadcrumb-item active" aria-current="page" th:text=" '/ Записна книжка '"></li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <div class="row">
+        <a th:href="@{/notebook/add/{user_id}(user_id=${user.id})}" class="m-3 col-md-auto btn btn-lg btn-success">
+            Додати
+        </a>
+    </div>
+
+<table class="table align-middle p-1 table-sm table-hover table-striped">
+    <thead class="table-secondary">
+    <tr>
+        <th>#</th>
+        <th>Повне імʼя</th>
+        <th>Email</th>
+        <th>Адреса</th>
+        <th>Тип знайомства</th>
+        <th>День народження</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tr th:each="person : ${persons}" >
+        <td th:text="${person.getId()}">
+        </td>
+        <td th:text="${person.getFirstName() + ' ' + person.getLastName() + ' ' + person.getSurname()}">
+        </td>
+        <td th:text="${person.getEmail()}">
+        </td>
+        <td th:text="${person.getAddress()}">
+        </td>
+        <td>
+              <span th:text="${person.getConnection()}" class="badge bg-primary badge-lg">
+            </span>
+        </td>
+        <td th:text="${person.getBirthday()}">
+        </td>
+        <td>
+            <div class="px-2">
+                <a th:href="@{/notebook/{person_id}(person_id=${person.id})}" class="btn btn-sm btn-info">
+                    <i class="bi bi-info-circle mx-1"></i>
+
+                </a>
+                <a href="/" class="btn btn-sm btn-warning">
+                    <i class="bi bi-pencil mx-1"></i>
+
+                </a>
+                <a class="btn btn-sm btn-danger" data-bs-target="#myconfirm" data-bs-toggle="modal"
+                   th:attr="data-bs-link=@{/notebook/delete(person_id=${person.id},user_id=${person.getNoteUser()})}, data-bs-text=${person.getFirstName()}, data-bs-id=${person.id}">
+                    <i class="bi bi-trash"></i>
+                </a>
+
+            </div>
+        </td>
+    </tr>
+
+</table>
+
+    <div class="container">
+    <div class="row justify-content-center">
+        <nav aria-label="Page navigation" class="col-auto">
+            <ul class="pagination">
+                <li class="page-item" th:classappend="${currentPage == 1 ? 'disabled' : ''}">
+                    <a class="page-link" th:href="@{'/notebook/user/'+ ${user.getId()} + '?page=1'}">Перша</a>
+                </li>
+                <li class="page-item" th:classappend="${currentPage == 1 ? 'disabled' : ''}">
+                    <a class="page-link" th:href="@{'/notebook/user/'+ ${user.getId()} + '?page=' + ${currentPage - 1}}">Попередня</a>
+                </li>
+                <li class="page-item" th:each="i : ${#numbers.sequence(1, totalPages)}"
+                    th:classappend="${currentPage == i ? 'active' : ''}">
+                    <a class="page-link" th:href="@{'/notebook/user/' + ${user.getId()} + '?page=' + ${i}}" th:text="${i}"></a>
+                </li>
+                <li class="page-item" th:classappend="${currentPage == totalPages  ? 'disabled' : ''}">
+                    <a class="page-link" th:href="@{'/notebook/user/'+ ${user.getId()} + '?page=' + ${currentPage + 1 }}">Наступна</a>
+                </li>
+                <li class="page-item" th:classappend="${currentPage == totalPages  ? 'disabled' : ''}">
+                    <a class="page-link" th:href="@{'/notebook/user/'+ ${user.getId()} + '?page=' + ${totalPages}}">Остання</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+    </div>
+
+
+
+    <div class="modal fade" id="myconfirm" data-bs-backdrop="static" data-bs-keyboard="false"
+         tabindex="-1" aria-labelledby="staticWarningLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticWarningLabel">Попередження</h1>
+                    <button type="button" class="btn-close" aria-label="Close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    Ви впевнені, що хочете видалити цей запис<br/>
+                    Якщо ви натиснете видалити, цю дію <i>не можна відмінити</i>.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Відмінити</button>
+                    <a class="btn btn-danger delete-button">Видалити</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    let myConfirmDialog = document.getElementById('myconfirm')
+    myConfirmDialog.addEventListener('show.bs.modal', function (event){
+        let button = event.relatedTarget
+        let link = button.getAttribute('data-bs-link')
+        let cid = button.getAttribute('data-bs-id')
+        let text = button.getAttribute('data-bs-text')
+        let modalTitle = myConfirmDialog.querySelector('.modal-title')
+        modalTitle.textContent = 'Видалити: ' + text + ' (' + cid + ')'
+        let deleteButton = myConfirmDialog.querySelector('.delete-button')
+        deleteButton.setAttribute('href', link)
+        let course = document.getElementById('course-txt')
+        course.textContent = text
+    })
+</script>
+
+<script th:src="@{/webjars/bootstrap/5.3.3/dist/js/bootstrap.bundle.js}"></script>
+
+</body>
+</html>

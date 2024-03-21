@@ -1,0 +1,11 @@
+spring:
+    application:
+        name: final_addressbook_huza
+    datasource:
+      url: jdbc:postgresql://localhost:5432/address_book_gfl
+      username: postgres
+      password: password
+    jpa:
+      show-sql: false
+server:
+  port: 8080

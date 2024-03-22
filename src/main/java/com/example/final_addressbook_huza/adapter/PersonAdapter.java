@@ -24,7 +24,7 @@ public class PersonAdapter {
     String lastModified;
     Set<JobAdapter> jobs;
     List<String> phonenumbers;
-    Set<StudyAdapter> studies;
+    Set<EducationAdapter> educations;
     Integer connectionId;
 
 
@@ -101,10 +101,10 @@ public class PersonAdapter {
 
         this.phonenumbers = phonenumbers;
 
-        Set<StudyAdapter> studies = new HashSet<>();;
-        person.ifPresent(value -> value.getStudies().forEach(study -> studies.add(new StudyAdapter(Optional.ofNullable(study)))));
+        Set<EducationAdapter> educationA = new HashSet<>();;
+        person.ifPresent(value -> value.getStudies().forEach(study -> educationA.add(new EducationAdapter(Optional.ofNullable(study)))));
 
-        this.studies = studies;
+        this.educations = educationA;
     }
 
 }

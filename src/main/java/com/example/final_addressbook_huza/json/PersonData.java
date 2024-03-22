@@ -1,4 +1,4 @@
-package com.example.final_addressbook_huza.adapter;
+package com.example.final_addressbook_huza.json;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -6,14 +6,14 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
-import java.util.Map;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CombinedData {
+public class PersonData {
     private List<String> phoneNumbers;
-    private List<Map<String, String>> jobs;
-
+    private List<JSONJob> jobs;
+    private List<JSONEducation> educations;
 }
+

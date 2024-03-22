@@ -59,7 +59,7 @@ public class Person {
     private Set<Phonenumber> phonenumbers = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "person")
-    private Set<Study> studies = new LinkedHashSet<>();
+    private Set<Education> studies = new LinkedHashSet<>();
 
     @PrePersist
     @PreUpdate

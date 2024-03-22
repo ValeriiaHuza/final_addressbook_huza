@@ -1,12 +1,11 @@
 package com.example.final_addressbook_huza.controllers;
 
-import com.example.final_addressbook_huza.adapter.CombinedData;
 import com.example.final_addressbook_huza.adapter.PersonAdapter;
 import com.example.final_addressbook_huza.data.*;
-import com.example.final_addressbook_huza.services.ConnectionService;
-import com.example.final_addressbook_huza.services.NoteUserService;
-import com.example.final_addressbook_huza.services.PersonService;
-import com.example.final_addressbook_huza.services.PhoneNumberService;
+import com.example.final_addressbook_huza.json.JSONEducation;
+import com.example.final_addressbook_huza.json.JSONJob;
+import com.example.final_addressbook_huza.json.PersonData;
+import com.example.final_addressbook_huza.services.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -32,6 +31,8 @@ public class PersonController {
     private NoteUserService noteUserService;
     private ConnectionService connectionService;
     private PhoneNumberService phoneNumberService;
+    private JobService jobService;
+    private EducationService educationService;
 
     @GetMapping("/user/{id}")
     public String findAllPersonsForUser(@PathVariable(name = "id") int userId, Model model,
@@ -97,12 +98,77 @@ public class PersonController {
     }
 
     @PostMapping("/save/{user_id}")
-    public String savePerson(@PathVariable(name = "user_id") int userId, @RequestParam(name = "datajson") String phoneNumbersJson, PersonAdapter person) {
+    public String savePerson(@PathVariable(name = "user_id") int userId, @RequestParam(name = "datajson") String jsonData, PersonAdapter person) {
 
         System.out.println(person);
 
+        Person newPerson = createPerson(userId, person);
+
+        List<Phonenumber> phoneNumbersList = new ArrayList<>();
+        List<Job> jobList = new ArrayList<>();
+        List<Education> educationList = new ArrayList<>();
+
+        if (!jsonData.isEmpty()) {
+            extractDataFromJson(jsonData, phoneNumbersList, jobList, educationList);
+        }
+
+        Person personCreated =  personService.addNewPerson(newPerson);
+
+        for(Phonenumber phone : phoneNumbersList ) {
+            phone.setPerson(personCreated);
+            phoneNumberService.addNewPhoneNumber(phone);
+        }
+
+        for(Job job : jobList ) {
+            job.setPerson(personCreated);
+            jobService.addNewJob(job);
+        }
+
+        for (Education education : educationList){
+            education.setPerson(personCreated);
+            educationService.addNewEducation(education);
+        }
+
+        System.out.println(personCreated.toString());
+        return "redirect:/notebook/user/"+userId;
+    }
+
+    private void extractDataFromJson(String jsonData, List<Phonenumber> phoneNumbersList, List<Job> jobList, List<Education> educationList) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            PersonData data = objectMapper.readValue(jsonData, PersonData.class);
+
+            data.getPhoneNumbers().forEach(number -> {
+                Phonenumber phone = new Phonenumber();
+                phone.setPhone(number);
+                phoneNumbersList.add(phone);
+            });
+
+            data.getEducations().forEach(educationJson -> {
+                Education education = new Education();
+                education.setEducationPlace(educationJson.getEducationPlace());
+                education.setSpecialization(educationJson.getSpecialization());
+                educationList.add(education);
+            });
+
+            data.getJobs().forEach(jsonJobnumber -> {
+                Job job = new Job();
+                job.setJobPlace(jsonJobnumber.getJobPlace());
+                job.setVacancy(jsonJobnumber.getJobVacancy());
+                jobList.add(job);
+            });
+
+        } catch (JsonProcessingException e) {
+            // Handle the exception appropriately, e.g., logging or throwing a custom exception
+            throw new IllegalArgumentException("Could not parse json data: " + jsonData, e);
+        }
+    }
+
+    private Person createPerson(int userId, PersonAdapter person) {
+
         Person newPerson = new Person();
-        newPerson.setUser(noteUserService.getUserById(userId).get());
+
+        newPerson.setUser(noteUserService.getUserById(userId).orElseThrow( () -> new IllegalArgumentException("User not faund")));
         newPerson.setFirstName(person.getFirstName());
         if(person.getLastName()!=null && !person.getLastName().isEmpty()) {
             newPerson.setLastName(person.getLastName());
@@ -132,37 +198,7 @@ public class PersonController {
             newPerson.setConnection(connectionService.getConnectionById(person.getConnectionId()).get());
         }
 
-        List<Phonenumber> phoneNumbersList = new ArrayList<>();
-
-        if(!phoneNumbersJson.isEmpty()){
-            ObjectMapper objectMapper = new ObjectMapper();
-            List<String> phoneNumbers = new ArrayList<>();
-            try {
-                phoneNumbers = objectMapper.readValue(phoneNumbersJson, new TypeReference<List<String>>(){});
-            } catch (JsonProcessingException e) {
-                System.out.println("Could not parse phone numbers");
-            }
-
-            for(String phone: phoneNumbers) {
-                Phonenumber phoneNumber = new Phonenumber();
-                phoneNumber.setPhone(phone);
-                phoneNumbersList.add(phoneNumber);
-            }
-
-        }
-
-        //jobs
-        //studies
-
-        Person personCreated =  personService.addNewPerson(newPerson);
-
-        for(Phonenumber phone : phoneNumbersList ) {
-            phone.setPerson(personCreated);
-            phoneNumberService.addNewPhoneNumber(phone);
-        }
-
-        System.out.println(personCreated.toString());
-        return "redirect:/notebook/user/"+userId;
+        return newPerson;
     }
 
     @GetMapping("/delete")

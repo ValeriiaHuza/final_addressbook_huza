@@ -72,9 +72,11 @@
 
                         <div class="mb-3">
                             <div id="phoneNumbers">
-                                <div class="mb-3">
-                                    <label for="phoneNumber" class="form-label">Номер телефону</label>
-                                    <input name="phone" type="tel" class="form-control" id="phoneNumber" required>
+                                <label for="phoneNumber" class="form-label">Номер телефону</label>
+                                <div class="phoneInput input-group mb-3">
+                                    <input name="phone" type="tel" class="form-control " id="phoneNumber" required>
+
+
                                 </div>
                             </div>
                             <button type="button" class="btn btn-secondary my-1" onclick="addPhoneNumber()">Додати номер
@@ -94,7 +96,7 @@
                                                    placeholder="Місце освіти" required>
                                             <input name="specialization" type="text" class="form-control mb-3"
                                                    placeholder="Спеціалізація" required>
-                                        </div>
+                                            </div>
                                     </div>
                                     <button type="button" class="btn btn-secondary my-1" onclick="addEducation()">Додати ще одне
                                         навчання
@@ -138,11 +140,25 @@
 
 <script>
 
+    function removeJob(button) {
+        button.closest('.job-inputs').remove();
+    }
+
+    function removeEducation(button) {
+        button.closest('.education-inputs').remove();
+    }
+
+    function removePhones(button) {
+        button.closest('.phoneInput').remove();
+    }
+
     function addEducation() {
         let educationInputs = document.createElement('div');
         educationInputs.classList.add('education-inputs', 'mb-3');
         educationInputs.innerHTML =
             '<hr/>' +
+
+            '<button type="button" class="btn-close" aria-label="Close" onclick="removeEducation(this)"></button>'+
             '<input name="educationPlace" type="text" class="form-control mb-3" placeholder="Місце освіти">' +
             '<input name="specialization" type="text" class="form-control mb-3" placeholder="Спеціалізація">';
         document.getElementById('educations').appendChild(educationInputs);
@@ -153,6 +169,7 @@
         jobInputs.classList.add('job-inputs', 'mb-3');
         jobInputs.innerHTML =
             '<hr/>' +
+            '<button type="button" class="btn-close" aria-label="Close" onclick="removeJob(this)"></button>'+
             '<input name="jobPlace" type="text" class="form-control mb-3" placeholder="Місце роботи">' +
             '<input name="jobVacancy" type="text" class="form-control mb-3" placeholder="Посада">';
         document.getElementById('jobs').appendChild(jobInputs);
@@ -160,9 +177,11 @@
 
     function addPhoneNumber() {
         let numberInputs = document.createElement('div');
-        numberInputs.innerHTML = '<div class="mb-3">' +
-            '<input name="phone" type="tel" class="form-control" required>' +
-            '</div>';
+        numberInputs.innerHTML = '<div class="phoneInput input-group mb-3">' +
+            '<input name="phone" type="tel" class="form-control" required>'
+            + '  <span class="input-group-text">'
+            + '<button type="button" class="btn-close" aria-label="Close" onclick="removePhones(this)"></button>'
+            + '</span></div>';
         document.getElementById('phoneNumbers').appendChild(numberInputs);
     }
 

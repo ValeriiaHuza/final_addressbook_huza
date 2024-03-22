@@ -140,22 +140,39 @@ public class PersonController {
 
             data.getPhoneNumbers().forEach(number -> {
                 Phonenumber phone = new Phonenumber();
-                phone.setPhone(number);
-                phoneNumbersList.add(phone);
+                if(!number.trim().isEmpty()) {
+                    phone.setPhone(number);
+                    phoneNumbersList.add(phone);
+                }
             });
 
             data.getEducations().forEach(educationJson -> {
                 Education education = new Education();
-                education.setEducationPlace(educationJson.getEducationPlace());
-                education.setSpecialization(educationJson.getSpecialization());
-                educationList.add(education);
+                if(!educationJson.getEducationPlace().trim().isEmpty()) {
+                    education.setEducationPlace(educationJson.getEducationPlace());
+                }
+                if(!educationJson.getSpecialization().trim().isEmpty()) {
+                    education.setSpecialization(educationJson.getSpecialization());
+                }
+
+                if(education.getEducationPlace() !=null || education.getSpecialization()!=null ){
+                    educationList.add(education);
+                }
             });
 
             data.getJobs().forEach(jsonJobnumber -> {
                 Job job = new Job();
-                job.setJobPlace(jsonJobnumber.getJobPlace());
-                job.setVacancy(jsonJobnumber.getJobVacancy());
-                jobList.add(job);
+                if(!jsonJobnumber.getJobPlace().isEmpty()){
+                    job.setJobPlace(jsonJobnumber.getJobPlace());
+                }
+
+                if(!jsonJobnumber.getJobVacancy().isEmpty()){
+                    job.setVacancy(jsonJobnumber.getJobVacancy());
+                }
+
+                if(job.getJobPlace()!=null || job.getVacancy()!=null){
+                    jobList.add(job);
+                }
             });
 
         } catch (JsonProcessingException e) {

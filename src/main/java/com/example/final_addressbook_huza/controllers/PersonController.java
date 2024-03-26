@@ -31,25 +31,21 @@ public class PersonController {
     private JobService jobService;
     private EducationService educationService;
 
+    // ?page=2&sort=name&order=asc
     @GetMapping("/user/{id}")
     public String findAllPersonsForUser(@PathVariable(name = "id") int userId, Model model,
-                                        @RequestParam(defaultValue = "1", name = "page") int page) {
+                                        @RequestParam(defaultValue = "1", name = "page") int page,
+                                        @RequestParam(defaultValue = "id", name = "sort") String sortField,
+                                        @RequestParam(defaultValue = "asc", name = "order") String sortOrder){
 
         Optional<NoteUser> userOptional = noteUserService.getUserById(userId);
         NoteUser user = userOptional.get();
 
         List<Person> personList;
 
-        Pageable paging = PageRequest.of(page - 1, 15);
-
         Page<Person> pagePerson;
 
-        pagePerson = personService.getPersonsByUser(userId, paging);
-
-//        } else {
-//            pagePerson = tutorialRepository.findByTitleContainingIgnoreCase(keyword, paging);
-//            model.addAttribute("keyword", keyword);
-//        }
+        pagePerson = personService.getPersonsByUser(userId, page, sortField,sortOrder);
 
         personList = pagePerson.getContent();
 
@@ -61,8 +57,15 @@ public class PersonController {
 
         System.out.println(pagePerson.getNumber());
 
+        List<Person> birthdays = personService.getPersonsWithBirthdayToday(userId);
+
+        model.addAttribute("sortField", sortField);
+        model.addAttribute("sortOrder", sortOrder);
+        model.addAttribute("reverseSortDir", sortOrder.equals("asc") ? "desc" : "asc");
+
         model.addAttribute("persons", newList);
         model.addAttribute("user", user);
+        model.addAttribute("birthday", birthdays);
         model.addAttribute("currentPage", pagePerson.getNumber() + 1);
         model.addAttribute("totalItems", pagePerson.getTotalElements());
         model.addAttribute("totalPages", pagePerson.getTotalPages());

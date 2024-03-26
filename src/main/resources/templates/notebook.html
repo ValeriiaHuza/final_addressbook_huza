@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="/css/mystyle.css" >
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.3/dist/css/bootstrap.css}">
     <link rel="stylesheet" th:href="@{/webjars/bootstrap-icons/1.11.3/font/bootstrap-icons.css}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 </head>
 <body>
@@ -33,19 +34,29 @@
 <table class="table align-middle p-1 table-sm table-hover table-striped">
     <thead class="table-secondary">
     <tr>
-        <th>#</th>
-        <th>Повне імʼя</th>
-        <th>Email</th>
-        <th>Адреса</th>
+        <th> <a th:href="@{'/notebook/user/' + ${user.id} + '?page' + ${currentPage} + '&sort=id&order=' + ${reverseSortDir}}">#</a>
+        </th>
+        <th><a th:href="@{'/notebook/user/' + ${user.id} + '?page' + ${currentPage} + '&sort=firstName&order=' + ${reverseSortDir}}">Імʼя</a>
+        </th>
+        <th><a th:href="@{'/notebook/user/' + ${user.id} + '?page' + ${currentPage} + '&sort=lastName&order=' + ${reverseSortDir}}">Прізвище</a></th>
+        <th><a th:href="@{'/notebook/user/' + ${user.id} + '?page' + ${currentPage} + '&sort=surname&order=' + ${reverseSortDir}}">По-батькові</a>
+        </th>
+        <th> <a th:href="@{'/notebook/user/' + ${user.id} + '?page' + ${currentPage} + '&sort=email&order=' + ${reverseSortDir}}">Email</a></th>
+        <th> <a th:href="@{'/notebook/user/' + ${user.id} + '?page' + ${currentPage} + '&sort=address&order=' + ${reverseSortDir}}">Адреса</a></th>
         <th>Тип знайомства</th>
-        <th>День народження</th>
+        <th> <a th:href="@{'/notebook/user/' + ${user.id} + '?page' + ${currentPage} + '&sort=birthday&order=' + ${reverseSortDir}}">День народження</a>
+            </th>
         <th></th>
     </tr>
     </thead>
     <tr th:each="person : ${persons}" >
         <td th:text="${person.getId()}">
         </td>
-        <td th:text="${person.getFirstName() + ' ' + person.getLastName() + ' ' + person.getSurname()}">
+        <td th:text="${person.getFirstName()}">
+        </td>
+        <td th:text="${person.getLastName()}">
+        </td>
+        <td th:text="${person.getSurname()}">
         </td>
         <td th:text="${person.getEmail()}">
         </td>
@@ -83,24 +94,54 @@
         <nav aria-label="Page navigation" class="col-auto">
             <ul class="pagination">
                 <li class="page-item" th:classappend="${currentPage == 1 ? 'disabled' : ''}">
-                    <a class="page-link" th:href="@{'/notebook/user/'+ ${user.getId()} + '?page=1'}">Перша</a>
+                    <a class="page-link" th:href="@{'/notebook/user/'+ ${user.getId()} + '?page=1' + '&sort=' + ${sortField} + '&order=' + ${sortOrder}}">Перша</a>
                 </li>
                 <li class="page-item" th:classappend="${currentPage == 1 ? 'disabled' : ''}">
-                    <a class="page-link" th:href="@{'/notebook/user/'+ ${user.getId()} + '?page=' + ${currentPage - 1}}">Попередня</a>
+                    <a class="page-link" th:href="@{'/notebook/user/'+ ${user.getId()} + '?page=' + ${currentPage - 1} + '&sort=' + ${sortField} + '&order=' + ${sortOrder}}">Попередня</a>
                 </li>
                 <li class="page-item" th:each="i : ${#numbers.sequence(1, totalPages)}"
                     th:classappend="${currentPage == i ? 'active' : ''}">
-                    <a class="page-link" th:href="@{'/notebook/user/' + ${user.getId()} + '?page=' + ${i}}" th:text="${i}"></a>
+                    <a class="page-link" th:href="@{'/notebook/user/' + ${user.getId()} + '?page=' + ${i} + '&sort=' + ${sortField} + '&order=' + ${sortOrder}}" th:text="${i}"></a>
                 </li>
                 <li class="page-item" th:classappend="${currentPage == totalPages  ? 'disabled' : ''}">
-                    <a class="page-link" th:href="@{'/notebook/user/'+ ${user.getId()} + '?page=' + ${currentPage + 1 }}">Наступна</a>
+                    <a class="page-link" th:href="@{'/notebook/user/'+ ${user.getId()} + '?page=' + ${currentPage + 1 } + '&sort=' + ${sortField} + '&order=' + ${sortOrder}}">Наступна</a>
                 </li>
                 <li class="page-item" th:classappend="${currentPage == totalPages  ? 'disabled' : ''}">
-                    <a class="page-link" th:href="@{'/notebook/user/'+ ${user.getId()} + '?page=' + ${totalPages}}">Остання</a>
+                    <a class="page-link" th:href="@{'/notebook/user/'+ ${user.getId()} + '?page=' + ${totalPages} + '&sort=' + ${sortField} + '&order=' + ${sortOrder}}">Остання</a>
                 </li>
             </ul>
         </nav>
     </div>
+    </div>
+
+    <div th:each="person : ${birthday}">
+        <!-- Bootstrap notification card -->
+        <div class="card mb-3">
+            <div class="card-body">
+                <!-- Notification content -->
+                <h5 class="card-title">День народження <i class="bi bi-cake2"></i></h5>
+                <p class="card-text" th:text="${person.firstName + ' ' + (person.lastName != null ? person.lastName : '') + ' святкує день народження сьогодні!'}"></p>
+                <button class="btn btn-primary showRandomWishBtn" >Привітати</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="birthdayWish"
+         tabindex="-1"  aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5">Привітання</h1>
+                    <button type="button" class="btn-close" aria-label="Close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p id="birthdayWishText"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрити</button>
+                </div>
+            </div>
+        </div>
     </div>
 
 
@@ -128,6 +169,25 @@
 </div>
 
 <script>
+    $(document).ready(function() {
+        $('.showRandomWishBtn').click(function() {
+            // Make AJAX request to fetch random birthday wish
+            $.ajax({
+                type: 'GET',
+                url: '/getRandomWish', // Endpoint in PersonController
+                success: function(data) {
+                    // Show the modal
+                    $('#birthdayWish').modal('show');
+                    // Set the wish text in the modal body
+                    $('#birthdayWishText').text(data);
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error fetching random birthday wish:', error);
+                }
+            });
+        });
+    })
+
     let myConfirmDialog = document.getElementById('myconfirm')
     myConfirmDialog.addEventListener('show.bs.modal', function (event){
         let button = event.relatedTarget

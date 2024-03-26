@@ -31,6 +31,7 @@
                 <div class="card-body">
                     <form id="myform" th:action="@{/notebook/save/{user_id}(user_id=${user.getId()})}"
                           th:object="${person}" method="post">
+                        <input type="hidden" th:field="*{id}" th:value="${person.id}"/>
                         <div class="mb-3">
                             <label for="firstName" class="form-label">Ім'я</label>
                             <input type="text" th:field="*{firstName}" class="form-control" id="firstName" required>
@@ -52,7 +53,7 @@
                             <input type="email" th:field="*{email}" class="form-control" id="email">
                         </div>
                         <div class="mb-3">
-                            <label for="connection" class="form-label">Тип знайомства</label>
+                            <label for="connection" class="form-label" >Тип знайомства</label>
                             <select th:field="*{connectionId}" class="form-select" id="connection">
                                 <th:block th:each="connection : ${connections}">
                                     <option th:text="${connection.title}" th:value="${connection.id}"></option>
@@ -139,6 +140,8 @@
 </div>
 
 <script>
+
+
 
     function removeJob(button) {
         button.closest('.job-inputs').remove();

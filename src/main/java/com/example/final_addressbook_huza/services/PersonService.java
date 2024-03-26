@@ -18,16 +18,13 @@ public class PersonService {
     private final PersonRepository personRepository;
     public Page<Person> getPersonsByUser(int userId, Pageable paging) {
 
-        Page<Person> persons = personRepository.findByUserId(userId, paging);
-
+        Page<Person> persons = personRepository.findByUserIdOrderByIdAsc(userId, paging);
 
         return persons;
     }
 
-    public PersonAdapter getPersonById(int userId) {
-        Optional<Person> person =  personRepository.findById(userId);
-
-        return new PersonAdapter(person);
+    public Optional<Person> getPersonById(int userId) {
+        return personRepository.findById(userId);
     }
 
     public Person addNewPerson(Person newPerson) {

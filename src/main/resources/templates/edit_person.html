@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>Змінити запис</title>
+    <link rel="stylesheet" href="/css/mystyle.css">
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.3/dist/css/bootstrap.css}">
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap-icons/1.11.3/font/bootstrap-icons.css}">
+
+</head>
+<body>
+
+<div class="container-fluid py-4">
+
+    <div class="row justify-content-center">
+        <div class="col">
+            <nav aria-label="breadcrumb" class="bg-light rounded-3 p-3 mb-4">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><a th:href="@{/notebook/user/{user_id}(user_id=${user.getId()})}">Записна
+                        книжка</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Змінити</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <form id="myform" th:action="@{/notebook/edit/{user_id}(user_id=${user.getId()})}"
+                          th:object="${person}" method="post">
+                        <input type="hidden" th:field="*{id}" th:value="${person.id}"/>
+                        <div class="mb-3">
+                            <label for="firstName" class="form-label">Ім'я</label>
+                            <input type="text" th:field="*{firstName}" class="form-control" id="firstName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="lastName" class="form-label">Прізвище</label>
+                            <input type="text" th:field="*{lastName}" class="form-control" id="lastName">
+                        </div>
+                        <div class="mb-3">
+                            <label for="surname" class="form-label">По-батькові</label>
+                            <input type="text" th:field="*{surname}" class="form-control" id="surname">
+                        </div>
+                        <div class="mb-3">
+                            <label for="address" class="form-label">Адреса</label>
+                            <input type="text" th:field="*{address}" class="form-control" id="address">
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" th:field="*{email}" class="form-control" id="email">
+                        </div>
+                        <div class="mb-3">
+                            <label for="connection" class="form-label">Тип знайомства</label>
+                            <select th:field="*{connectionId}" class="form-select" id="connection">
+                                <th:block th:each="connection : ${connections}">
+                                    <option th:text="${connection.title}" th:value="${connection.id}"></option>
+                                </th:block>
+
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="personDescription" class="form-label">Персональні характеристики</label>
+                            <textarea class="form-control" th:field="*{personDescription}" id="personDescription"
+                                      rows="3"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="birthday" class="form-label">День народження</label>
+                            <input type="date" th:field="*{birthday}" class="form-control" id="birthday">
+                        </div>
+
+                        <!--                        maybe do something with phone id-->
+
+                        <!--                        <div class="container mb-3">-->
+                        <!--                            <div class="card">-->
+                        <!--                                <div class="card-header">-->
+                        <!--                                    <h5 class="card-title">Освіта</h5>-->
+                        <!--                                </div>-->
+                        <!--                                <div class="card-body">-->
+                        <!--                                    <div id="educations">-->
+                        <!--                                        <div  th:each="education : ${educations}">-->
+                        <!--                                            <div class="education-inputs mb-3">-->
+                        <!--                                                <button type="button" class="btn-close" aria-label="Close" onclick="removeEducation(this)"></button>-->
+                        <!--                                                <input th:value="${education.getEducationPlace()}" name="educationPlace" type="text" class="form-control mb-3"-->
+                        <!--                                                       placeholder="Місце освіти" required>-->
+                        <!--                                                <input th:value="${education.getSpecialization()}" name="specialization" type="text" class="form-control mb-3"-->
+                        <!--                                                       placeholder="Спеціалізація" required>-->
+                        <!--                                            </div>-->
+                        <!--                                        </div>-->
+                        <!--                                    </div>-->
+                        <!--                                    <button type="button" class="btn btn-secondary my-1" onclick="addEducation()">Додати ще одне-->
+                        <!--                                        навчання-->
+                        <!--                                    </button>-->
+
+                        <!--                                </div>-->
+                        <!--                            </div>-->
+                        <!--                        </div>-->
+
+                        <!--                        <div class="container mb-3">-->
+                        <!--                            <div class="card">-->
+                        <!--                                <div class="card-header">-->
+                        <!--                                    <h5 class="card-title">Робота</h5>-->
+                        <!--                                </div>-->
+                        <!--                                <div class="card-body">-->
+                        <!--                                    <div id="jobs">-->
+                        <!--                                        <div  th:each="job : ${jobs}">-->
+                        <!--                                            <div class="job-inputs mb-3">-->
+                        <!--                                                <button type="button" class="btn-close" aria-label="Close" onclick="removeJob(this)"></button>-->
+                        <!--                                                <input th:value="${job.getJobPlace()}" name="jobPlace" type="text" class="form-control mb-3"-->
+                        <!--                                                       placeholder="Місце роботи" required>-->
+                        <!--                                                <input th:value="${job.getVacancy()}" name="jobVacancy" type="text" class="form-control mb-3"-->
+                        <!--                                                       placeholder="Посада" required>-->
+                        <!--                                            </div>-->
+                        <!--                                        </div>-->
+                        <!--                                    </div>-->
+                        <!--                                    <button type="button" class="btn btn-secondary my-1" onclick="addJob()">Додати ще одну-->
+                        <!--                                        роботу-->
+                        <!--                                    </button>-->
+
+                        <!--                                </div>-->
+                        <!--                            </div>-->
+                        <!--                        </div>-->
+                        <input type="hidden" id="datajson" name="datajson"/>
+                        <div class="text-center">
+                            <button class="btn btn-primary">Зберегти</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="mb-3">
+                        <p>Номери телефонів</p>
+                        <table class="table">
+                            <tbody id="phoneNumbers">
+                            <!-- Кожен телефон у своєму окремому рядку -->
+                            <tr th:each="ph : ${phones}">
+                                <td>
+                                    <input class="form-control" th:value="${ph.phone}" disabled/>
+                                </td>
+                                <td>
+                                    <!-- Кнопка "Редагувати" -->
+                                    <a class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editPhone"
+                                       th:attr="data-bs-link=@{/phone/add(person_id=${person.id})}, data-bs-text=${ph.phone}, data-bs-id=${ph.id}"
+                                    >
+                                        <i class="bi bi-pencil mx-1"></i> Редагувати
+                                    </a>
+                                    <!-- Кнопка "Видалити" -->
+                                    <a th:href="@{/phone/delete(phone_id=${ph.id},person_id=${person.id})}"
+                                       type="button" class="btn btn-danger">
+                                        <i class="bi bi-trash mx-1"></i> Видалити
+                                    </a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                        <a class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addPhone"
+                           th:attr="data-bs-link=@{/phone/add(person_id=${person.getId()})}">
+                            Додати телефон
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="mb-3">
+                        <p>Освіта</p>
+                        <table class="table">
+                            <tbody id="educations">
+                            <!-- Кожен телефон у своєму окремому рядку -->
+                            <tr th:each="ed : ${educations}">
+
+                                <td class="align-middle" th:text="${ed.educationPlace}">
+                                </td>
+                                <td class="align-middle" th:text="${ed.specialization}">
+                                </td>
+                                <td>
+                                    <!-- Кнопка "Редагувати" -->
+                                    <a class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editEducation"
+                                       th:attr="data-bs-link=@{/education/add(person_id=${person.id})}, text-place=${ed.educationPlace}, text-spec=${ed.specialization}, data-bs-id=${ed.id}"
+                                    >
+                                        <i class="bi bi-pencil mx-1"></i> Редагувати
+                                    </a>
+                                    <!-- Кнопка "Видалити" -->
+                                    <a th:href="@{/education/delete(education_id=${ed.id},person_id=${person.id})}"
+                                       type="button" class="btn btn-danger">
+                                        <i class="bi bi-trash mx-1"></i> Видалити
+                                    </a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <a class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addEducation"
+                           th:attr="data-bs-link=@{/education/add(person_id=${person.getId()})}">
+                            Додати освіту
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="mb-3">
+                        <p>Робота</p>
+                        <table class="table">
+                            <tbody id="jobs">
+
+                            <tr th:each="j : ${jobs}">
+
+                                <td class="align-middle" th:text="${j.jobPlace}">
+                                </td>
+                                <td class="align-middle" th:text="${j.vacancy}">
+                                </td>
+                                <td>
+                                    <!-- Кнопка "Редагувати" -->
+                                    <a class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editJob"
+                                       th:attr="data-bs-link=@{/job/add(person_id=${person.id})}, text-place=${j.jobPlace}, text-spec=${j.vacancy}, data-bs-id=${j.id}"
+                                    >
+                                        <i class="bi bi-pencil mx-1"></i> Редагувати
+                                    </a>
+                                    <!-- Кнопка "Видалити" -->
+                                    <a th:href="@{/job/delete(job_id=${j.id},person_id=${person.id})}"
+                                       type="button" class="btn btn-danger">
+                                        <i class="bi bi-trash mx-1"></i> Видалити
+                                    </a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <a class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addJob"
+                           th:attr="data-bs-link=@{/job/add(person_id=${person.getId()})}">
+                            Додати роботу
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div id="editPhone" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Редагування телефонного номера</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Форма редагування -->
+                <form id="editPhoneForm" action="/editPhone" th:object="${phone}" method="post">
+                    <div class="mb-3">
+                        <label for="phoneV" class="form-label">Новий номер телефону</label>
+                        <input type="text" th:field="*{phone}" class="form-control" id="phoneV" name="phone" required>
+                        <input type="hidden" th:field="*{id}" id="editPhoneId" name="phoneId"/>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Зберегти зміни</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="editEducation" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Редагування освіти</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Форма редагування -->
+                <form id="editEducationForm" action="/editEducation" th:object="${education}" method="post">
+                    <div class="mb-3">
+                        <label for="educationPlaceE" class="form-label">Міце навчання</label>
+                        <input type="text" th:field="*{educationPlace}" class="form-control" id="educationPlaceE" name="educationPlace" required>
+                        <label for="specializationE" class="form-label">Спеціалізаія</label>
+                        <input type="text" th:field="*{specialization}" class="form-control" id="specializationE" name="specialization" required>
+
+                        <input type="hidden" th:field="*{id}" id="educationIdE" name="educationId"/>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Зберегти зміни</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="editJob" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Редагування роботи</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Форма редагування -->
+                <form id="editJobForm" action="/editJob" th:object="${job}" method="post">
+                    <div class="mb-3">
+                        <label for="jobPlaceE" class="form-label">Міце роботи</label>
+                        <input type="text" th:field="*{jobPlace}" class="form-control" id="jobPlaceE" name="jobPlace" required>
+                        <label for="vacancyE" class="form-label">Вакансія</label>
+                        <input type="text" th:field="*{vacancy}" class="form-control" id="vacancyE" name="vacancy" required>
+
+                        <input type="hidden" th:field="*{id}" id="jobIdE" name="jobId"/>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Зберегти зміни</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="addPhone" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Додати номер телефону</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="addPhoneForm" action="/add" th:object="${phone}" method="post">
+                    <div class="mb-3">
+                        <label for="phoneV2" class="form-label">Номер телефону</label>
+                        <input type="text" th:field="*{phone}" class="form-control" id="phoneV2" name="phone" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Додати</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="addEducation" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Додати освіту</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Форма редагування -->
+                <form id="addEducationForm" action="/addEducation" th:object="${education}" method="post">
+                    <div class="mb-3">
+                        <label for="educationPlaceA" class="form-label">Міце навчання</label>
+                        <input type="text" th:field="*{educationPlace}" class="form-control" id="educationPlaceA" name="educationPlace" required>
+                        <label for="specializationA" class="form-label">Спеціалізаія</label>
+                        <input type="text" th:field="*{specialization}" class="form-control" id="specializationA" name="specialization" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Додати</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="addJob" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Додати роботу</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Форма редагування -->
+                <form id="addJobForm" action="/addJob" th:object="${job}" method="post">
+                    <div class="mb-3">
+                        <label for="jobPlaceA" class="form-label">Міце роботи</label>
+                        <input type="text" th:field="*{jobPlace}" class="form-control" id="jobPlaceA" name="jobPlace" required>
+                        <label for="vacancyA" class="form-label">Вакансія</label>
+                        <input type="text" th:field="*{vacancy}" class="form-control" id="vacancyA" name="vacancy">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Додати</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let myPhoneEdit = document.getElementById('editPhone');
+    myPhoneEdit.addEventListener('show.bs.modal', function (event) {
+        let button = event.relatedTarget; // Кнопка, що відкрила модальне вікно
+        let link = button.getAttribute('data-bs-link');
+        let phoneId = button.getAttribute('data-bs-id');
+        let text = button.getAttribute('data-bs-text');
+
+        let hiddenInput = myPhoneEdit.querySelector("#editPhoneId");
+        hiddenInput.value = phoneId;
+
+        let textInput = myPhoneEdit.querySelector("#phoneV");
+        textInput.value = text;
+
+        let addHref = myPhoneEdit.querySelector('#editPhoneForm')
+        addHref.setAttribute('action', link)
+
+    });
+
+    let myEducationEdit = document.getElementById('editEducation');
+    myEducationEdit.addEventListener('show.bs.modal', function (event) {
+        let button = event.relatedTarget; // Кнопка, що відкрила модальне вікно
+        let link = button.getAttribute('data-bs-link');
+        let educationId = button.getAttribute('data-bs-id');
+        let place = button.getAttribute('text-place');
+        let specialization = button.getAttribute('text-spec');
+
+        console.log(place);
+        let hiddenInput = myEducationEdit.querySelector("#educationIdE");
+        hiddenInput.value = educationId;
+
+        let placeInput = myEducationEdit.querySelector("#educationPlaceE");
+        placeInput.value = place;
+
+        let specInput = myEducationEdit.querySelector("#specializationE");
+        specInput.value = specialization;
+
+        let addHref = myEducationEdit.querySelector('#editEducationForm')
+        addHref.setAttribute('action', link)
+
+    });
+
+    let myJobEdit = document.getElementById('editJob');
+    myJobEdit.addEventListener('show.bs.modal', function (event) {
+        let button = event.relatedTarget; // Кнопка, що відкрила модальне вікно
+        let link = button.getAttribute('data-bs-link');
+        let educationId = button.getAttribute('data-bs-id');
+        let place = button.getAttribute('text-place');
+        let vacancy = button.getAttribute('text-spec');
+
+        console.log(place);
+        let hiddenInput = myJobEdit.querySelector("#jobIdE");
+        hiddenInput.value = educationId;
+
+        let placeInput= myJobEdit.querySelector("#jobPlaceE");
+        placeInput.value = place;
+
+        let vacancyInput = myJobEdit.querySelector("#vacancyE");
+        vacancyInput.value = vacancy;
+
+        let addHref = myJobEdit.querySelector('#editJobForm')
+        addHref.setAttribute('action', link)
+
+    });
+
+    let myPhoneAdd = document.getElementById('addPhone');
+    myPhoneAdd.addEventListener('show.bs.modal', function (event) {
+        let button = event.relatedTarget; // Кнопка, що відкрила модальне вікно
+        let link = button.getAttribute('data-bs-link');
+
+        let addHref = myPhoneAdd.querySelector('#addPhoneForm')
+        addHref.setAttribute('action', link)
+    });
+
+    let myEducationAdd = document.getElementById('addEducation');
+    myEducationAdd.addEventListener('show.bs.modal', function (event) {
+        let button = event.relatedTarget; // Кнопка, що відкрила модальне вікно
+        let link = button.getAttribute('data-bs-link');
+
+        let addHref = myEducationAdd.querySelector('#addEducationForm')
+        addHref.setAttribute('action', link)
+    });
+
+    let myJobAdd = document.getElementById('addJob');
+    myJobAdd.addEventListener('show.bs.modal', function (event) {
+        let button = event.relatedTarget; // Кнопка, що відкрила модальне вікно
+        let link = button.getAttribute('data-bs-link');
+
+        let addHref = myJobAdd.querySelector('#addJobForm')
+        addHref.setAttribute('action', link)
+    });
+
+</script>
+
+<script th:src="@{/webjars/bootstrap/5.3.3/dist/js/bootstrap.bundle.js}"></script>
+</body>
+</html>

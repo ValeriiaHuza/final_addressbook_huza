@@ -59,16 +59,16 @@
         </td>
         <td>
             <div class="px-2">
-                <a th:href="@{/notebook/{person_id}(person_id=${person.id})}" class="btn btn-sm btn-info">
+                <a th:href="@{/notebook/person/{person_id}(person_id=${person.id})}" class="btn btn-sm btn-info">
                     <i class="bi bi-info-circle mx-1"></i>
 
                 </a>
-                <a href="/" class="btn btn-sm btn-warning">
+                <a  th:href="@{/notebook/edit/{person_id}(person_id=${person.id})}" class="btn btn-sm btn-warning">
                     <i class="bi bi-pencil mx-1"></i>
 
                 </a>
                 <a class="btn btn-sm btn-danger" data-bs-target="#myconfirm" data-bs-toggle="modal"
-                   th:attr="data-bs-link=@{/notebook/delete(person_id=${person.id},user_id=${person.getNoteUser()})}, data-bs-text=${person.getFirstName()}, data-bs-id=${person.id}">
+                   th:attr="data-bs-link=@{/notebook/delete(person_id=${person.id},user_id=${user.getId()})}, data-bs-text=${person.getFirstName()}, data-bs-id=${person.id}">
                     <i class="bi bi-trash"></i>
                 </a>
 

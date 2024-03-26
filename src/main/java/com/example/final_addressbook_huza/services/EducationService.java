@@ -6,6 +6,8 @@ import com.example.final_addressbook_huza.repositories.EducationRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @AllArgsConstructor
 public class EducationService {
@@ -15,4 +17,11 @@ public class EducationService {
         educationRepository.save(education);
     }
 
+    public List<Education> getEducationsByUserId(int id) {
+        return educationRepository.findByPersonId(id);
+    }
+
+    public void deletEducation(int id) {
+        educationRepository.deleteById(id);
+    }
 }

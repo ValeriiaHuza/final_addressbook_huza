@@ -2,12 +2,9 @@ package com.example.final_addressbook_huza.controllers;
 
 import com.example.final_addressbook_huza.adapter.PersonAdapter;
 import com.example.final_addressbook_huza.data.*;
-import com.example.final_addressbook_huza.json.JSONEducation;
-import com.example.final_addressbook_huza.json.JSONJob;
 import com.example.final_addressbook_huza.json.PersonData;
 import com.example.final_addressbook_huza.services.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -73,13 +70,12 @@ public class PersonController {
         return "notebook";
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/person/{id}")
     public String getPersonById(@PathVariable(name = "id") int userId, Model model) {
 
-        PersonAdapter person = personService.getPersonById(userId);
-
-        model.addAttribute("person", person);
-
+        Optional<Person> person = personService.getPersonById(userId);
+        PersonAdapter personAdapter = new PersonAdapter(person);
+        model.addAttribute("person", personAdapter);
         return "person_info";
     }
 
@@ -131,6 +127,18 @@ public class PersonController {
 
         System.out.println(personCreated.toString());
         return "redirect:/notebook/user/"+userId;
+    }
+
+    @PostMapping("/edit/{user_id}")
+    public String editPerson(@PathVariable(name = "user_id") int userId, PersonAdapter person) {
+
+        System.out.println(person);
+
+        Person newPerson = createPerson(userId, person);
+        Person personCreated =  personService.addNewPerson(newPerson);
+
+        System.out.println(personCreated.toString());
+        return "redirect:/notebook/edit/"+userId;
     }
 
     private void extractDataFromJson(String jsonData, List<Phonenumber> phoneNumbersList, List<Job> jobList, List<Education> educationList) {
@@ -185,10 +193,14 @@ public class PersonController {
 
         Person newPerson = new Person();
 
-        newPerson.setUser(noteUserService.getUserById(userId).orElseThrow( () -> new IllegalArgumentException("User not faund")));
+        newPerson.setUser(noteUserService.getUserById(userId).orElseThrow( () -> new IllegalArgumentException("User not found")));
         newPerson.setFirstName(person.getFirstName());
         if(person.getLastName()!=null && !person.getLastName().isEmpty()) {
             newPerson.setLastName(person.getLastName());
+        }
+
+        if(person.getId()!=null){
+            newPerson.setId(person.getId());
         }
 
         if(person.getSurname()!=null && !person.getSurname().isEmpty()) {
@@ -222,6 +234,31 @@ public class PersonController {
     public String delete(@RequestParam(name = "person_id") int id,@RequestParam(name = "user_id") int userId) {
         personService.deletePerson(id);
         return "redirect:/notebook/user/"+userId;
+    }
+
+    @GetMapping("/edit/{person_id}")
+    public String edit(@PathVariable(name = "person_id") int id, Model model) {
+        Optional<Person> person = personService.getPersonById(id);
+
+        model.addAttribute("user", person.get().getUser());
+
+        List<Connection> connetionList = connectionService.getConnections();
+        model.addAttribute("connections", connetionList);
+        model.addAttribute("person", new PersonAdapter(person));
+
+        List<Phonenumber> phonenumberList = phoneNumberService.getPhonesByUserId(id);
+        model.addAttribute("phones", phonenumberList);
+
+        model.addAttribute("phone",new Phonenumber());
+        model.addAttribute("education", new Education());
+        model.addAttribute("job", new Job());
+
+        List<Education> educationList = educationService.getEducationsByUserId(id);
+        model.addAttribute("educations", educationList);
+
+        List<Job> jobList = jobService.getJobsByUserId(id);
+        model.addAttribute("jobs", jobList);
+        return "edit_person";
     }
 
 

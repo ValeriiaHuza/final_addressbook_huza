@@ -29,9 +29,10 @@
         <div class="col-lg-6">
             <div class="card mb-4">
                 <div class="card-body">
-                    <form id="myform" th:action="@{/notebook/edit/{user_id}(user_id=${user.getId()})}"
+                    <form id="myform" th:action="@{/notebook/edit}"
                           th:object="${person}" method="post">
                         <input type="hidden" th:field="*{id}" th:value="${person.id}"/>
+                        <input type="hidden" th:field="*{noteUser}" th:value="${person.getNoteUser()}"/>
                         <div class="mb-3">
                             <label for="firstName" class="form-label">Ім'я</label>
                             <input type="text" th:field="*{firstName}" class="form-control" id="firstName" required>
@@ -70,59 +71,6 @@
                             <label for="birthday" class="form-label">День народження</label>
                             <input type="date" th:field="*{birthday}" class="form-control" id="birthday">
                         </div>
-
-                        <!--                        maybe do something with phone id-->
-
-                        <!--                        <div class="container mb-3">-->
-                        <!--                            <div class="card">-->
-                        <!--                                <div class="card-header">-->
-                        <!--                                    <h5 class="card-title">Освіта</h5>-->
-                        <!--                                </div>-->
-                        <!--                                <div class="card-body">-->
-                        <!--                                    <div id="educations">-->
-                        <!--                                        <div  th:each="education : ${educations}">-->
-                        <!--                                            <div class="education-inputs mb-3">-->
-                        <!--                                                <button type="button" class="btn-close" aria-label="Close" onclick="removeEducation(this)"></button>-->
-                        <!--                                                <input th:value="${education.getEducationPlace()}" name="educationPlace" type="text" class="form-control mb-3"-->
-                        <!--                                                       placeholder="Місце освіти" required>-->
-                        <!--                                                <input th:value="${education.getSpecialization()}" name="specialization" type="text" class="form-control mb-3"-->
-                        <!--                                                       placeholder="Спеціалізація" required>-->
-                        <!--                                            </div>-->
-                        <!--                                        </div>-->
-                        <!--                                    </div>-->
-                        <!--                                    <button type="button" class="btn btn-secondary my-1" onclick="addEducation()">Додати ще одне-->
-                        <!--                                        навчання-->
-                        <!--                                    </button>-->
-
-                        <!--                                </div>-->
-                        <!--                            </div>-->
-                        <!--                        </div>-->
-
-                        <!--                        <div class="container mb-3">-->
-                        <!--                            <div class="card">-->
-                        <!--                                <div class="card-header">-->
-                        <!--                                    <h5 class="card-title">Робота</h5>-->
-                        <!--                                </div>-->
-                        <!--                                <div class="card-body">-->
-                        <!--                                    <div id="jobs">-->
-                        <!--                                        <div  th:each="job : ${jobs}">-->
-                        <!--                                            <div class="job-inputs mb-3">-->
-                        <!--                                                <button type="button" class="btn-close" aria-label="Close" onclick="removeJob(this)"></button>-->
-                        <!--                                                <input th:value="${job.getJobPlace()}" name="jobPlace" type="text" class="form-control mb-3"-->
-                        <!--                                                       placeholder="Місце роботи" required>-->
-                        <!--                                                <input th:value="${job.getVacancy()}" name="jobVacancy" type="text" class="form-control mb-3"-->
-                        <!--                                                       placeholder="Посада" required>-->
-                        <!--                                            </div>-->
-                        <!--                                        </div>-->
-                        <!--                                    </div>-->
-                        <!--                                    <button type="button" class="btn btn-secondary my-1" onclick="addJob()">Додати ще одну-->
-                        <!--                                        роботу-->
-                        <!--                                    </button>-->
-
-                        <!--                                </div>-->
-                        <!--                            </div>-->
-                        <!--                        </div>-->
-                        <input type="hidden" id="datajson" name="datajson"/>
                         <div class="text-center">
                             <button class="btn btn-primary">Зберегти</button>
                         </div>

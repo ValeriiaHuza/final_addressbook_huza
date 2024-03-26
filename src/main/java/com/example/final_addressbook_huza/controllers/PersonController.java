@@ -129,16 +129,16 @@ public class PersonController {
         return "redirect:/notebook/user/"+userId;
     }
 
-    @PostMapping("/edit/{user_id}")
-    public String editPerson(@PathVariable(name = "user_id") int userId, PersonAdapter person) {
+    @PostMapping("/edit")
+    public String editPerson(PersonAdapter person) {
 
         System.out.println(person);
 
-        Person newPerson = createPerson(userId, person);
+        Person newPerson = createPerson(person.getNoteUser(),person);
         Person personCreated =  personService.addNewPerson(newPerson);
 
         System.out.println(personCreated.toString());
-        return "redirect:/notebook/edit/"+userId;
+        return "redirect:/notebook/edit/"+personCreated.getId();
     }
 
     private void extractDataFromJson(String jsonData, List<Phonenumber> phoneNumbersList, List<Job> jobList, List<Education> educationList) {

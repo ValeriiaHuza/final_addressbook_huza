@@ -30,6 +30,43 @@
             Додати
         </a>
     </div>
+    <div class="row">
+
+        <button class="m-3 col-md-auto btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
+           Усі фільтри
+        </button>
+
+        <div class="m-3 col-md-auto ms-auto">
+            <form th:action="@{/notebook/user/{user_id}(user_id=${user.id})}" method="get">
+            <div class="input-group rounded">
+                <input id="inputSearch" name="input" th:value="${input}"  type="search" class="form-control rounded" placeholder="Пошук" aria-describedby="search-addon" />
+                <button type="submit" class="input-group-text border-0"><i class="bi bi-search"></i>
+                </button>
+            </div>
+
+            </form>
+        </div>
+
+        <div class="m-3 col-md-auto ms-auto">
+            <div class="dropdown">
+                <button class="btn btn-lg dropdown-toggle" type="button" id="sortDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    Сортувати
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="sortDropdown">
+                    <li><a class="dropdown-item" th:href="@{'/notebook/user/' + ${user.id} + '?page' + ${currentPage} + '&sort=lastModified&order=' + ${reverseSortDir}}">За останнім редагуванням</a></li>
+                    <li><a class="dropdown-item" th:href="@{'/notebook/user/' + ${user.id} + '?page' + ${currentPage} + '&sort=firstName&order=' + ${reverseSortDir}}">За ім'ям</a></li>
+                    <li><a class="dropdown-item" th:href="@{'/notebook/user/' + ${user.id} + '?page' + ${currentPage} + '&sort=lastName&order=' + ${reverseSortDir}}">За прізвищем</a></li>
+                    <li><a class="dropdown-item" th:href="@{'/notebook/user/' + ${user.id} + '?page' + ${currentPage} + '&sort=surname&order=' + ${reverseSortDir}}">За по-батькові</a></li>
+                    <li><a class="dropdown-item" th:href="@{'/notebook/user/' + ${user.id} + '?page' + ${currentPage} + '&sort=email&order=' + ${reverseSortDir}}">За email</a></li>
+                    <li><a class="dropdown-item" th:href="@{'/notebook/user/' + ${user.id} + '?page' + ${currentPage} + '&sort=address&order=' + ${reverseSortDir}}">За адресою</a></li>
+                    <li><a class="dropdown-item" th:href="@{'/notebook/user/' + ${user.id} + '?page' + ${currentPage} + '&sort=id&order=' + ${reverseSortDir}}">За номером</a></li>
+                    <li><a class="dropdown-item" th:href="@{'/notebook/user/' + ${user.id} + '?page' + ${currentPage} + '&sort=birthday&order=' + ${reverseSortDir}}">За днем народженням</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <input type="hidden" id="userIdHidden" th:value="${user.getId()}">
 
 <table class="table align-middle p-1 table-sm table-hover table-striped">
     <thead class="table-secondary">
@@ -145,6 +182,25 @@
     </div>
 
 
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasExampleLabel">Тип знайомств</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Закрити"></button>
+        </div>
+        <div class="offcanvas-body">
+            <div th:each="connection : ${connections}">
+                <div class="form-check">
+                    <input name="connection" class="form-check-input" th:value="${connection.title}" type="checkbox" id="flexCheckDefault">
+                    <label class="form-check-label" for="flexCheckDefault"><p th:text="${connection.title}"></p>
+                    </label>
+                </div>
+             </div>
+        </div>
+
+        <button type="button" class="btn btn-primary" id="applyFilterBtn">Застосувати</button>
+    </div>
+
+
 
     <div class="modal fade" id="myconfirm" data-bs-backdrop="static" data-bs-keyboard="false"
          tabindex="-1" aria-labelledby="staticWarningLabel" aria-hidden="true">
@@ -169,6 +225,27 @@
 </div>
 
 <script>
+
+    $(document).ready(function() {
+        $('#applyFilterBtn').click(function() {
+            let baseUrl = '/notebook/user/' + document.getElementById('userIdHidden').value + '?';
+
+            // Collect selected connection types
+            let selectedConnections = [];
+            $('input[name="connection"]:checked').each(function() {
+                selectedConnections.push($(this).val());
+            });
+            // Append selected connection types to URL
+            selectedConnections.forEach(function(connection) {
+                baseUrl += 'connection=' + connection + '&';
+            });
+            // Remove trailing '&' if exists
+            baseUrl = baseUrl.slice(0, -1);
+            // Redirect to the filtered URL
+            window.location.href = baseUrl;
+        });
+    });
+
     $(document).ready(function() {
         $('.showRandomWishBtn').click(function() {
             // Make AJAX request to fetch random birthday wish

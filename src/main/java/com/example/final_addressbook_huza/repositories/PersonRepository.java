@@ -15,6 +15,6 @@ public interface PersonRepository extends JpaRepository<Person, Integer> {
     @Query("SELECT p FROM Person p WHERE p.user.id = ?1 AND EXTRACT(MONTH FROM p.birthday) = ?2 AND EXTRACT(DAY FROM p.birthday) = ?3")
     List<Person> findByBirthdayAndUserId(Integer userId, int monthValue, int dayOfMonth);
 
-
-
+    @Query("SELECT p FROM Person p WHERE CONCAT(COALESCE(p.firstName, ''), ' ', COALESCE(p.lastName, ''), ' ', COALESCE(p.surname, '')) ILIKE %?1%")
+    Page<Person> searchPersonsByName(String input, Integer userId, Pageable paging);
 }

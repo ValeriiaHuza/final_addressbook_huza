@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -36,7 +37,9 @@ public class PersonController {
     public String findAllPersonsForUser(@PathVariable(name = "id") int userId, Model model,
                                         @RequestParam(defaultValue = "1", name = "page") int page,
                                         @RequestParam(defaultValue = "id", name = "sort") String sortField,
-                                        @RequestParam(defaultValue = "asc", name = "order") String sortOrder){
+                                        @RequestParam(defaultValue = "asc", name = "order") String sortOrder,
+                                        @RequestParam List<String> connection,
+                                        @Param("input") String input){
 
         Optional<NoteUser> userOptional = noteUserService.getUserById(userId);
         NoteUser user = userOptional.get();
@@ -45,7 +48,7 @@ public class PersonController {
 
         Page<Person> pagePerson;
 
-        pagePerson = personService.getPersonsByUser(userId, page, sortField,sortOrder);
+        pagePerson = personService.getPersonsByUser(userId, page, sortField,sortOrder, input);
 
         personList = pagePerson.getContent();
 
@@ -55,10 +58,10 @@ public class PersonController {
             newList.add(new PersonAdapter(Optional.ofNullable(person)));
         }
 
-        System.out.println(pagePerson.getNumber());
-
         List<Person> birthdays = personService.getPersonsWithBirthdayToday(userId);
 
+
+        model.addAttribute("input", input);
         model.addAttribute("sortField", sortField);
         model.addAttribute("sortOrder", sortOrder);
         model.addAttribute("reverseSortDir", sortOrder.equals("asc") ? "desc" : "asc");
@@ -69,6 +72,8 @@ public class PersonController {
         model.addAttribute("currentPage", pagePerson.getNumber() + 1);
         model.addAttribute("totalItems", pagePerson.getTotalElements());
         model.addAttribute("totalPages", pagePerson.getTotalPages());
+        List<Connection> connetionList = connectionService.getConnections();
+        model.addAttribute("connections", connetionList);
 
         return "notebook";
     }

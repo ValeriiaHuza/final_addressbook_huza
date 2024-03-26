@@ -1,10 +1,8 @@
 package com.example.final_addressbook_huza.services;
 
-import com.example.final_addressbook_huza.adapter.PersonAdapter;
 import com.example.final_addressbook_huza.data.Person;
 import com.example.final_addressbook_huza.repositories.PersonRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -20,7 +18,7 @@ import java.util.Optional;
 public class PersonService {
 
     private final PersonRepository personRepository;
-    public Page<Person> getPersonsByUser(int userId, int page, String sortField, String sortOrder, String input) {
+    public Page<Person> getPersonsByUser(int userId, int page, String sortField, String sortOrder, String input, List<Integer> connection) {
 
         Sort sort = sortOrder.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending() :
                 Sort.by(sortField).descending();
@@ -29,6 +27,10 @@ public class PersonService {
 
         if (input != null && !input.isEmpty()) {
             return personRepository.searchPersonsByName(input, userId, paging);
+        }
+
+        if (connection!=null && !connection.isEmpty()){
+            return personRepository.findByConnectionIdInAndUserId(connection, userId, paging);
         }
 
         return personRepository.findByUserId(userId, paging);

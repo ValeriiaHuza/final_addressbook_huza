@@ -8,8 +8,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -38,7 +36,7 @@ public class PersonController {
                                         @RequestParam(defaultValue = "1", name = "page") int page,
                                         @RequestParam(defaultValue = "id", name = "sort") String sortField,
                                         @RequestParam(defaultValue = "asc", name = "order") String sortOrder,
-                                        @RequestParam List<String> connection,
+                                        @RequestParam (defaultValue = "") List<Integer> connection,
                                         @Param("input") String input){
 
         Optional<NoteUser> userOptional = noteUserService.getUserById(userId);
@@ -48,11 +46,11 @@ public class PersonController {
 
         Page<Person> pagePerson;
 
-        pagePerson = personService.getPersonsByUser(userId, page, sortField,sortOrder, input);
+        pagePerson = personService.getPersonsByUser(userId, page, sortField,sortOrder, input, connection);
 
         personList = pagePerson.getContent();
 
-        List<PersonAdapter> newList = new ArrayList<PersonAdapter>();
+        List<PersonAdapter> newList = new ArrayList<>();
 
         for (Person person : personList){
             newList.add(new PersonAdapter(Optional.ofNullable(person)));
@@ -60,6 +58,7 @@ public class PersonController {
 
         List<Person> birthdays = personService.getPersonsWithBirthdayToday(userId);
 
+        System.out.println(connection.toString());
 
         model.addAttribute("input", input);
         model.addAttribute("sortField", sortField);

@@ -190,7 +190,7 @@
         <div class="offcanvas-body">
             <div th:each="connection : ${connections}">
                 <div class="form-check">
-                    <input name="connection" class="form-check-input" th:value="${connection.title}" type="checkbox" id="flexCheckDefault">
+                    <input name="connection" class="form-check-input" th:value="${connection.id}" type="checkbox" id="flexCheckDefault">
                     <label class="form-check-label" for="flexCheckDefault"><p th:text="${connection.title}"></p>
                     </label>
                 </div>

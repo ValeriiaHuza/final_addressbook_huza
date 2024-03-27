@@ -183,7 +183,7 @@
                 <h5 class="card-title">День народження <i class="bi bi-cake2"></i></h5>
                 <p class="card-text"
                    th:text="${person.firstName + ' ' + (person.lastName != null ? person.lastName : '') + ' святкує день народження сьогодні!'}"></p>
-                <button class="btn btn-primary showRandomWishBtn">Привітати</button>
+                <button th:value="${person.email}" class="btn btn-primary showRandomWishBtn">Привітати</button>
             </div>
         </div>
     </div>
@@ -196,12 +196,14 @@
                     <h1 class="modal-title fs-5">Привітання</h1>
                     <button type="button" class="btn-close" aria-label="Close" data-bs-dismiss="modal"></button>
                 </div>
-                <div class="modal-body">
-                    <p id="birthdayWishText"></p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрити</button>
-                </div>
+                    <div class="modal-body">
+                        <p id="birthdayWishText"></p>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary showWishButton">Надіслати</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрити</button>
+                    </div>
             </div>
         </div>
     </div>
@@ -360,6 +362,9 @@
 
         $('.showRandomWishBtn').click(function () {
             // Make AJAX request to fetch random birthday wish
+            console.log(this)
+            let email = $(this).attr('value');
+
             $.ajax({
                 type: 'GET',
                 url: '/getRandomWish', // Endpoint in PersonController

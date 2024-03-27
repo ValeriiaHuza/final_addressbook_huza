@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
     <title>Додати запис</title>
     <link rel="stylesheet" href="/css/mystyle.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.3/dist/css/bootstrap.css}">
     <link rel="stylesheet" th:href="@{/webjars/bootstrap-icons/1.11.3/font/bootstrap-icons.css}">
 
@@ -36,10 +37,11 @@
 
                         <div id="validationAlert1" class="alert alert-danger alert-dismissible fade show" role="alert"
                              style="display: none;">
-                            <!-- Close button -->
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                            <!-- Alert message content -->
-                            <span id="validationMessage"></span>
+                           <!-- Alert message content -->
+                            <span id="validationMessage1"></span>
+                            <button type="button" class="btn btn-sm close" aria-label="Close">
+                                <span aria-hidden="true"><i class="bi bi-x"></i></span></button>
+
                         </div>
 
 
@@ -87,13 +89,13 @@
                         </div>
 
                         <div class="mb-3">
-                            <div id="validationAlert2" class="alert alert-danger alert-dismissible fade show"
-                                 role="alert" style="display: none;">
-                                <!-- Close button -->
-                                <button type="button" id="closeButton2" class="btn-close" data-bs-dismiss="alert"
-                                        aria-label="Close"></button>
+                            <div id="validationAlert2" class="alert alert-danger alert-dismissible fade show" role="alert"
+                                 style="display: none;">
                                 <!-- Alert message content -->
                                 <span id="validationMessage2"></span>
+                                <button type="button" class="btn btn-sm close" aria-label="Close">
+                                    <span aria-hidden="true"><i class="bi bi-x"></i></span></button>
+
                             </div>
 
                             <div id="phoneNumbers">
@@ -215,71 +217,69 @@
         document.getElementById('phoneNumbers').appendChild(numberInputs);
     }
 
-    // Function to display validation message
-    function showValidationAlert(message) {
-        const validationMessage = document.getElementById('validationMessage');
-        validationMessage.textContent = message;
-        document.getElementById('validationAlert1').style.display = 'block';
-    }
 
-    // Function to hide validation message
-    function hideValidationAlert() {
-        document.getElementById('validationAlert1').style.display = 'none';
-    }
+    $(document).ready(function() {
 
-    function showValidationAlert2(message) {
-        const validationMessage = document.getElementById('validationMessage2');
-        console.log(validationMessage)
-        validationMessage.textContent = message;
-        document.getElementById('validationAlert2').style.display = 'block';
-    }
+        // Close validation alert when close button is clicked
+        $('#validationAlert1 .close').click(function() {
+            $('#validationAlert1').hide();
+        });
 
-    // Function to hide validation message
-    function hideValidationAlert2() {
-        document.getElementById('validationAlert2').style.display = 'none';
-    }
+        // Hide validation alert when user starts typing in the form inputs
+        $('#firstName').on('input', function() {
+            $('#validationAlert1').hide();
+        });
 
-    const closeButton = document.getElementById('validationAlert1').querySelector('.btn-close');
-    closeButton.addEventListener('click', function () {
-        hideValidationAlert(); // Hide the alert when the close button is clicked
-    });
+        $('#email').on('input', function() {
+            $('#validationAlert1').hide();
+        });
 
-    const closeButton2 = document.getElementById('validationAlert2').querySelector('#closeButton2');
-    closeButton2.addEventListener('click', function () {
-        hideValidationAlert2(); // Hide the alert when the close button is clicked
-    });
+        $('#validationAlert2 .close').click(function() {
+            $('#validationAlert2').hide();
+        });
 
-    document.getElementById('myform').querySelectorAll('input, select, textarea').forEach(function (input) {
-        input.addEventListener('input', function () {
-            hideValidationAlert(); // Hide validation message when user starts typing
-            hideValidationAlert2()
+        // Hide validation alert when user starts typing in the form inputs
+        $('#phoneNumber').on('input', function() {
+            $('#validationAlert2').hide();
         });
     });
 
+    function showValidationAlert(message) {
+        const validationMessage = $('#validationMessage1');
+        validationMessage.text(message);
+        $('#validationAlert1').show(); // Show the alert
+    }
+    function showValidationAlert2(message) {
+        const validationMessage = $('#validationMessage2');
+        validationMessage.text(message);
+        $('#validationAlert2').show(); // Show the alert
+    }
+
     function collect() {
 
+        // Check if the form is valid
         if (!document.getElementById('myform').checkValidity()) {
-
             if (document.getElementById('firstName').value.trim() === '') {
-                showValidationAlert("Заповніть імʼя! Це обовʼязкове поле");
+                showValidationAlert('Заповніть імʼя! Це обовʼязкове поле')
                 return;
             }
-
             if (!document.getElementById('email').checkValidity()) {
                 showValidationAlert("Некорректно введений емейл");
                 return;
             }
 
-            let phoneInputs = document.querySelectorAll('.phoneNumber');
-            phoneInputs.forEach(function (input) {
-                // Check if the input value matches the pattern
-                if (!input.checkValidity()) {
-                    showValidationAlert2("Некорректно введений номер телефону");
-                }
-            });
+                let phoneInputs = document.querySelectorAll('.phoneNumber');
+                phoneInputs.forEach(function (input) {
+                    // Check if the input value matches the pattern
+                    if (!input.checkValidity()) {
+                        showValidationAlert2("Некорректно введений номер телефону");
+                    }
 
-            return;
+                });
+
+                return;
         }
+
 
         let phoneNumbers = [];
         let phoneNumberInputs = document.querySelectorAll('input[name="phone"]');

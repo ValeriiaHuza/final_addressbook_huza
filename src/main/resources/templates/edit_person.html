@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
     <title>Змінити запис</title>
     <link rel="stylesheet" href="/css/mystyle.css">
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.3/dist/css/bootstrap.css}">
     <link rel="stylesheet" th:href="@{/webjars/bootstrap-icons/1.11.3/font/bootstrap-icons.css}">
 
@@ -34,10 +36,11 @@
 
                         <div id="validationAlert1" class="alert alert-danger alert-dismissible fade show" role="alert"
                              style="display: none;">
-                            <!-- Close button -->
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                             <!-- Alert message content -->
-                            <span id="validationMessage"></span>
+                            <span id="validationMessage1"></span>
+                            <button type="button" class="btn btn-sm close" aria-label="Close">
+                                <span aria-hidden="true"><i class="bi bi-x"></i></span></button>
+
                         </div>
 
                         <input type="hidden" th:field="*{id}" th:value="${person.id}"/>
@@ -84,7 +87,7 @@
                             <input type="date" th:field="*{birthday}" class="form-control" id="birthday">
                         </div>
                         <div class="text-center">
-                            <button class="btn btn-primary">Зберегти</button>
+                            <button type="submit" onclick="collect()" class="btn btn-primary">Зберегти</button>
                         </div>
                     </form>
                 </div>
@@ -215,7 +218,8 @@
                 <form id="editPhoneForm" action="/editPhone" th:object="${phone}" method="post">
                     <div class="mb-3">
                         <label for="phoneV" class="form-label">Новий номер телефону</label>
-                        <input type="text" th:field="*{phone}" class="form-control" id="phoneV" name="phone" required>
+                        <small>(Формат: +380XXXXXXXXX)</small>
+                        <input type="tel" th:field="*{phone}" class="form-control" id="phoneV" name="phone" pattern="^\+380\d{9}$" required>
                         <input type="hidden" th:field="*{id}" id="editPhoneId" name="phoneId"/>
                     </div>
                     <button type="submit" class="btn btn-primary">Зберегти зміни</button>
@@ -289,7 +293,8 @@
                 <form id="addPhoneForm" action="/add" th:object="${phone}" method="post">
                     <div class="mb-3">
                         <label for="phoneV2" class="form-label">Номер телефону</label>
-                        <input type="text" th:field="*{phone}" class="form-control" id="phoneV2" name="phone" required>
+                        <small>(Формат: +380XXXXXXXXX)</small>
+                        <input type="tel" th:field="*{phone}" pattern="^\+380\d{9}$" class="form-control" id="phoneV2" name="phone" required>
                     </div>
                     <button type="submit" class="btn btn-primary">Додати</button>
                 </form>
@@ -348,7 +353,57 @@
 </div>
 
 <script>
-    let myPhoneEdit = document.getElementById('editPhone');
+
+    $(document).ready(function() {
+
+        // Close validation alert when close button is clicked
+        $('#validationAlert1 .close').click(function() {
+            $('#validationAlert1').hide();
+        });
+
+        // Hide validation alert when user starts typing in the form inputs
+        $('#firstName').on('input', function() {
+            $('#validationAlert1').hide();
+        });
+
+        $('#email').on('input', function() {
+            $('#validationAlert1').hide();
+        });
+
+    });
+
+    function showValidationAlert(message) {
+        const validationMessage = $('#validationMessage1');
+        validationMessage.text(message);
+        $('#validationAlert1').show(); // Show the alert
+    }
+
+    function collect() {
+
+        // Check if the form is valid
+        if (!document.getElementById('myform').checkValidity()) {
+            if (document.getElementById('firstName').value.trim() === '') {
+                showValidationAlert('Заповніть імʼя! Це обовʼязкове поле')
+                return;
+            }
+            if (!document.getElementById('email').checkValidity()) {
+                showValidationAlert("Некорректно введений емейл");
+                return;
+            }
+
+            let phoneInputs = document.querySelectorAll('.phoneNumber');
+            phoneInputs.forEach(function (input) {
+                // Check if the input value matches the pattern
+                if (!input.checkValidity()) {
+                    showValidationAlert2("Некорректно введений номер телефону");
+                }
+            });
+
+        }
+        document.getElementById('myform').submit();
+    }
+
+        let myPhoneEdit = document.getElementById('editPhone');
     myPhoneEdit.addEventListener('show.bs.modal', function (event) {
         let button = event.relatedTarget; // Кнопка, що відкрила модальне вікно
         let link = button.getAttribute('data-bs-link');

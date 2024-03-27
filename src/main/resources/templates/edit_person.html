@@ -6,7 +6,6 @@
     <title>Змінити запис</title>
     <link rel="stylesheet" href="/css/mystyle.css">
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.3/dist/css/bootstrap.css}">
     <link rel="stylesheet" th:href="@{/webjars/bootstrap-icons/1.11.3/font/bootstrap-icons.css}">
 
@@ -352,8 +351,8 @@
     </div>
 </div>
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-
     $(document).ready(function() {
 
         // Close validation alert when close button is clicked
@@ -403,96 +402,40 @@
         document.getElementById('myform').submit();
     }
 
-        let myPhoneEdit = document.getElementById('editPhone');
-    myPhoneEdit.addEventListener('show.bs.modal', function (event) {
-        let button = event.relatedTarget; // Кнопка, що відкрила модальне вікно
-        let link = button.getAttribute('data-bs-link');
-        let phoneId = button.getAttribute('data-bs-id');
-        let text = button.getAttribute('data-bs-text');
+    function setupModalListeners(modalId, formIdAttr, hiddenInputIdAttr, textInputIdAttr, linkAttr, idAttr, placeAttr, specAttr, vacancyAttr) {
+        let modal = document.getElementById(modalId);
+        modal.addEventListener('show.bs.modal', function (event) {
+            let button = event.relatedTarget;
+            let link = button.getAttribute(linkAttr);
+            let itemId = button.getAttribute(idAttr);
+            let place = button.getAttribute(placeAttr);
+            let specialization = button.getAttribute(specAttr);
+            let vacancy = button.getAttribute(vacancyAttr);
 
-        let hiddenInput = myPhoneEdit.querySelector("#editPhoneId");
-        hiddenInput.value = phoneId;
+            let hiddenInput = modal.querySelector(hiddenInputIdAttr);
+            if (hiddenInput) hiddenInput.value = itemId;
 
-        let textInput = myPhoneEdit.querySelector("#phoneV");
-        textInput.value = text;
+            let textInput = modal.querySelector(textInputIdAttr);
+            if (textInput) textInput.value = place;
 
-        let addHref = myPhoneEdit.querySelector('#editPhoneForm')
-        addHref.setAttribute('action', link)
+            let specInput = modal.querySelector("#specializationE");
+            if (specInput) specInput.value = specialization;
 
-    });
+            let vacancyInput = modal.querySelector("#vacancyE");
+            if (vacancyInput) vacancyInput.value = vacancy;
 
-    let myEducationEdit = document.getElementById('editEducation');
-    myEducationEdit.addEventListener('show.bs.modal', function (event) {
-        let button = event.relatedTarget; // Кнопка, що відкрила модальне вікно
-        let link = button.getAttribute('data-bs-link');
-        let educationId = button.getAttribute('data-bs-id');
-        let place = button.getAttribute('text-place');
-        let specialization = button.getAttribute('text-spec');
+            let addHref = modal.querySelector(formIdAttr);
+            if (addHref) addHref.setAttribute('action', link);
+        });
+    }
 
-        console.log(place);
-        let hiddenInput = myEducationEdit.querySelector("#educationIdE");
-        hiddenInput.value = educationId;
+    setupModalListeners('editPhone', '#editPhoneForm', '#editPhoneId', '#phoneV', 'data-bs-link', 'data-bs-id', 'data-bs-text', null, null);
+    setupModalListeners('editEducation', '#editEducationForm', '#educationIdE', '#educationPlaceE', 'data-bs-link', 'data-bs-id', 'text-place', 'text-spec', null);
+    setupModalListeners('editJob', '#editJobForm', '#jobIdE', '#jobPlaceE', 'data-bs-link', 'data-bs-id', 'text-place', null, 'text-spec');
 
-        let placeInput = myEducationEdit.querySelector("#educationPlaceE");
-        placeInput.value = place;
-
-        let specInput = myEducationEdit.querySelector("#specializationE");
-        specInput.value = specialization;
-
-        let addHref = myEducationEdit.querySelector('#editEducationForm')
-        addHref.setAttribute('action', link)
-
-    });
-
-    let myJobEdit = document.getElementById('editJob');
-    myJobEdit.addEventListener('show.bs.modal', function (event) {
-        let button = event.relatedTarget; // Кнопка, що відкрила модальне вікно
-        let link = button.getAttribute('data-bs-link');
-        let educationId = button.getAttribute('data-bs-id');
-        let place = button.getAttribute('text-place');
-        let vacancy = button.getAttribute('text-spec');
-
-        console.log(place);
-        let hiddenInput = myJobEdit.querySelector("#jobIdE");
-        hiddenInput.value = educationId;
-
-        let placeInput = myJobEdit.querySelector("#jobPlaceE");
-        placeInput.value = place;
-
-        let vacancyInput = myJobEdit.querySelector("#vacancyE");
-        vacancyInput.value = vacancy;
-
-        let addHref = myJobEdit.querySelector('#editJobForm')
-        addHref.setAttribute('action', link)
-
-    });
-
-    let myPhoneAdd = document.getElementById('addPhone');
-    myPhoneAdd.addEventListener('show.bs.modal', function (event) {
-        let button = event.relatedTarget; // Кнопка, що відкрила модальне вікно
-        let link = button.getAttribute('data-bs-link');
-
-        let addHref = myPhoneAdd.querySelector('#addPhoneForm')
-        addHref.setAttribute('action', link)
-    });
-
-    let myEducationAdd = document.getElementById('addEducation');
-    myEducationAdd.addEventListener('show.bs.modal', function (event) {
-        let button = event.relatedTarget; // Кнопка, що відкрила модальне вікно
-        let link = button.getAttribute('data-bs-link');
-
-        let addHref = myEducationAdd.querySelector('#addEducationForm')
-        addHref.setAttribute('action', link)
-    });
-
-    let myJobAdd = document.getElementById('addJob');
-    myJobAdd.addEventListener('show.bs.modal', function (event) {
-        let button = event.relatedTarget; // Кнопка, що відкрила модальне вікно
-        let link = button.getAttribute('data-bs-link');
-
-        let addHref = myJobAdd.querySelector('#addJobForm')
-        addHref.setAttribute('action', link)
-    });
+    setupModalListeners('addPhone', '#addPhoneForm', null, '#phoneV2', 'data-bs-link', null, null, null, null);
+    setupModalListeners('addEducation', '#addEducationForm', null, '#educationPlaceA', 'data-bs-link', null, null, null, null);
+    setupModalListeners('addJob', '#addJobForm', null, '#jobPlaceA', 'data-bs-link', null, null, null, '#vacancyA');
 
 </script>
 

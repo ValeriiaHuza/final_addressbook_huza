@@ -39,16 +39,10 @@ public class PersonController {
                                         @RequestParam(defaultValue = "") List<Integer> connection,
                                         @Param("input") String input) {
 
-        Optional<NoteUser> userOptional = noteUserService.getUserById(userId);
-        NoteUser user = userOptional.get();
+        NoteUser user = noteUserService.getUserById(userId).orElse(new NoteUser());
 
-        List<Person> personList;
-
-        Page<Person> pagePerson;
-
-        pagePerson = personService.getPersonsByUser(userId, page, sortField, sortOrder, input, connection);
-
-        personList = pagePerson.getContent();
+        Page<Person> pagePerson = personService.getPersonsByUser(userId, page, sortField, sortOrder, input, connection);
+        List<Person> personList = pagePerson.getContent();
 
         List<PersonAdapter> newList = new ArrayList<>();
 
@@ -57,22 +51,18 @@ public class PersonController {
         }
 
         List<Person> birthdays = personService.getPersonsWithBirthdayToday(userId);
-        System.out.println(connection.toString());
 
         model.addAttribute("input", input);
         model.addAttribute("sortField", sortField);
         model.addAttribute("sortOrder", sortOrder);
         model.addAttribute("reverseSortDir", sortOrder.equals("asc") ? "desc" : "asc");
-
-        System.out.println("pages" + pagePerson.getTotalPages());
         model.addAttribute("persons", newList);
         model.addAttribute("user", user);
         model.addAttribute("birthday", birthdays);
         model.addAttribute("currentPage", pagePerson.getNumber() + 1);
         model.addAttribute("totalItems", pagePerson.getTotalElements());
         model.addAttribute("totalPages", pagePerson.getTotalPages() == 0 ? 1 : pagePerson.getTotalPages());
-        List<Connection> connetionList = connectionService.getConnections();
-        model.addAttribute("connections", connetionList);
+        model.addAttribute("connections", connectionService.getConnections());
         model.addAttribute("connectionFilter", connection);
 
         return "notebook";
@@ -80,31 +70,23 @@ public class PersonController {
 
     @GetMapping("/person/{id}")
     public String getPersonById(@PathVariable(name = "id") int userId, Model model) {
-
         Optional<Person> person = personService.getPersonById(userId);
-        PersonAdapter personAdapter = new PersonAdapter(person);
-        model.addAttribute("person", personAdapter);
+        model.addAttribute("person", new PersonAdapter(person));
         return "person_info";
     }
 
     @GetMapping("/add/{id}")
     public String redirectToForm(@PathVariable(name = "id") int userId, Model model) {
 
-        Optional<NoteUser> userO = noteUserService.getUserById(userId);
-        NoteUser user = userO.get();
-        model.addAttribute("user", user);
+        model.addAttribute("user", noteUserService.getUserById(userId).orElse(new NoteUser()));
         model.addAttribute("person", new PersonAdapter());
-
-        List<Connection> connetionList = connectionService.getConnections();
-        model.addAttribute("connections", connetionList);
+        model.addAttribute("connections", connectionService.getConnections());
 
         return "add_person";
     }
 
     @PostMapping("/save/{user_id}")
     public String savePerson(@PathVariable(name = "user_id") int userId, @RequestParam(name = "datajson") String jsonData, PersonAdapter person) {
-
-        System.out.println(person);
 
         Person newPerson = createPerson(userId, person);
 
@@ -117,35 +99,29 @@ public class PersonController {
         }
 
         Person personCreated = personService.addNewPerson(newPerson);
-
-        for (Phonenumber phone : phoneNumbersList) {
+        phoneNumbersList.forEach(phone -> {
             phone.setPerson(personCreated);
             phoneNumberService.addNewPhoneNumber(phone);
-        }
+        });
 
-        for (Job job : jobList) {
+        jobList.forEach(job -> {
             job.setPerson(personCreated);
             jobService.addNewJob(job);
-        }
+        });
 
-        for (Education education : educationList) {
+        educationList.forEach(education -> {
             education.setPerson(personCreated);
             educationService.addNewEducation(education);
-        }
+        });
 
-        System.out.println(personCreated.toString());
         return "redirect:/notebook/user/" + userId;
     }
 
     @PostMapping("/edit")
     public String editPerson(PersonAdapter person) {
-
-        System.out.println(person);
-
         Person newPerson = createPerson(person.getNoteUser(), person);
         Person personCreated = personService.addNewPerson(newPerson);
 
-        System.out.println(personCreated.toString());
         return "redirect:/notebook/edit/" + personCreated.getId();
     }
 
@@ -154,51 +130,41 @@ public class PersonController {
         try {
             PersonData data = objectMapper.readValue(jsonData, PersonData.class);
 
-            data.getPhoneNumbers().forEach(number -> {
-                Phonenumber phone = new Phonenumber();
-                if (!number.trim().isEmpty()) {
-                    phone.setPhone(number);
-                    phoneNumbersList.add(phone);
-                }
-            });
+            data.getPhoneNumbers().stream()
+                    .filter(number -> !number.trim().isEmpty())
+                    .map(number -> {
+                        Phonenumber phone = new Phonenumber();
+                        phone.setPhone(number);
+                        return phone;
+                    })
+                    .forEach(phoneNumbersList::add);
 
-            data.getEducations().forEach(educationJson -> {
-                Education education = new Education();
-                if (!educationJson.getEducationPlace().trim().isEmpty()) {
-                    education.setEducationPlace(educationJson.getEducationPlace());
-                }
-                if (!educationJson.getSpecialization().trim().isEmpty()) {
-                    education.setSpecialization(educationJson.getSpecialization());
-                }
 
-                if (education.getEducationPlace() != null || education.getSpecialization() != null) {
-                    educationList.add(education);
-                }
-            });
+            data.getEducations().stream()
+                    .filter(educationJson -> !educationJson.getEducationPlace().trim().isEmpty() || !educationJson.getSpecialization().trim().isEmpty())
+                    .forEach(educationJson -> {
+                        Education education = new Education();
+                        education.setEducationPlace(educationJson.getEducationPlace());
+                        education.setSpecialization(educationJson.getSpecialization());
+                        educationList.add(education);
+                    });
 
-            data.getJobs().forEach(jsonJobnumber -> {
-                Job job = new Job();
-                if (!jsonJobnumber.getJobPlace().isEmpty()) {
-                    job.setJobPlace(jsonJobnumber.getJobPlace());
-                }
+            data.getJobs().stream()
+                    .filter(jsonJobnumber -> !jsonJobnumber.getJobPlace().isEmpty() || !jsonJobnumber.getJobVacancy().isEmpty())
+                    .forEach(jsonJobnumber -> {
+                        Job job = new Job();
+                        job.setJobPlace(jsonJobnumber.getJobPlace());
+                        job.setVacancy(jsonJobnumber.getJobVacancy());
+                        jobList.add(job);
+                    });
 
-                if (!jsonJobnumber.getJobVacancy().isEmpty()) {
-                    job.setVacancy(jsonJobnumber.getJobVacancy());
-                }
-
-                if (job.getJobPlace() != null || job.getVacancy() != null) {
-                    jobList.add(job);
-                }
-            });
 
         } catch (JsonProcessingException e) {
-            // Handle the exception appropriately, e.g., logging or throwing a custom exception
             throw new IllegalArgumentException("Could not parse json data: " + jsonData, e);
         }
     }
 
     private Person createPerson(int userId, PersonAdapter person) {
-
         Person newPerson = new Person();
 
         newPerson.setUser(noteUserService.getUserById(userId).orElseThrow(() -> new IllegalArgumentException("User not found")));
@@ -232,7 +198,7 @@ public class PersonController {
         }
 
         if (person.getConnectionId() != null && person.getConnectionId() != 0) {
-            newPerson.setConnection(connectionService.getConnectionById(person.getConnectionId()).get());
+            newPerson.setConnection(connectionService.getConnectionById(person.getConnectionId()).orElseGet(Connection::new));
         }
 
         return newPerson;
@@ -248,24 +214,17 @@ public class PersonController {
     public String edit(@PathVariable(name = "person_id") int id, Model model) {
         Optional<Person> person = personService.getPersonById(id);
 
-        model.addAttribute("user", person.get().getUser());
-
-        List<Connection> connetionList = connectionService.getConnections();
-        model.addAttribute("connections", connetionList);
+        model.addAttribute("user", person.orElseGet(Person::new).getUser());
+        model.addAttribute("connections", connectionService.getConnections());
         model.addAttribute("person", new PersonAdapter(person));
-
-        List<Phonenumber> phonenumberList = phoneNumberService.getPhonesByUserId(id);
-        model.addAttribute("phones", phonenumberList);
+        model.addAttribute("phones", phoneNumberService.getPhonesByUserId(id));
+        model.addAttribute("educations", educationService.getEducationsByUserId(id));
+        model.addAttribute("jobs",  jobService.getJobsByUserId(id));
 
         model.addAttribute("phone", new Phonenumber());
         model.addAttribute("education", new Education());
         model.addAttribute("job", new Job());
 
-        List<Education> educationList = educationService.getEducationsByUserId(id);
-        model.addAttribute("educations", educationList);
-
-        List<Job> jobList = jobService.getJobsByUserId(id);
-        model.addAttribute("jobs", jobList);
         return "edit_person";
     }
 

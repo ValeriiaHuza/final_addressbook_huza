@@ -323,6 +323,20 @@
             $(this).attr('href', href);
         });
 
+        $('#applyFilterBtn').click(function () {
+            // Collect selected connection types
+            let selectedConnections = '[';
+            $('input[name="connection"]:checked').each(function () {
+                selectedConnections += $(this).val() + ", ";
+            });
+
+            selectedConnections = selectedConnections.substring(0, selectedConnections.length - 2);
+            selectedConnections += ']';
+
+            // Redirect to the filtered URL
+            window.location.href = generateHrefWithPage(1,userId, input, selectedConnections, sortField, sortOrder);
+        });
+
         // Update the href of the first page link
         $('#firstPageLink').attr('href', generateHrefWithPage(1, userId, input, connections, sortField, sortOrder));
 
@@ -344,22 +358,6 @@
 
     });
 
-
-    $(document).ready(function () {
-        $('#applyFilterBtn').click(function () {
-            // Collect selected connection types
-            let selectedConnections = '[';
-            $('input[name="connection"]:checked').each(function () {
-                selectedConnections += $(this).val() + ", ";
-            });
-
-            selectedConnections = selectedConnections.substring(0, selectedConnections.length - 2);
-            selectedConnections += ']';
-
-            // Redirect to the filtered URL
-            window.location.href = generateHref($('#userIdHidden').val(), $('#inputHidden').val(), selectedConnections);
-        });
-    });
 
     $(document).ready(function () {
         $('.showRandomWishBtn').click(function () {

@@ -25,6 +25,10 @@ public class PersonService {
 
         Pageable paging = PageRequest.of(page - 1, 15, sort);
 
+        if(connection!=null && input!=null && !connection.isEmpty() && !input.isEmpty()) {
+            return personRepository.searchPersonsByNameAndConnection(input, connection, userId, paging);
+        }
+
         if (input != null && !input.isEmpty()) {
             return personRepository.searchPersonsByName(input, userId, paging);
         }

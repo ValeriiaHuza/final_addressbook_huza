@@ -57,7 +57,6 @@ public class PersonController {
         }
 
         List<Person> birthdays = personService.getPersonsWithBirthdayToday(userId);
-
         System.out.println(connection.toString());
 
         model.addAttribute("input", input);
@@ -74,6 +73,7 @@ public class PersonController {
         model.addAttribute("totalPages", pagePerson.getTotalPages() == 0 ? 1 : pagePerson.getTotalPages() );
         List<Connection> connetionList = connectionService.getConnections();
         model.addAttribute("connections", connetionList);
+        model.addAttribute("connectionFilter", connection);
 
         return "notebook";
     }

@@ -19,4 +19,7 @@ public interface PersonRepository extends JpaRepository<Person, Integer> {
 
     @Query("select p from Person p where p.connection.id IN ?1 AND p.user.id = ?2")
     Page<Person> findByConnectionIdInAndUserId(List<Integer> connectionIds, Integer userId,Pageable paging);
+
+    @Query("select p from Person p WHERE CONCAT(COALESCE(p.firstName, ''), ' ', COALESCE(p.lastName, ''), ' ', COALESCE(p.surname, '')) ILIKE %?1% AND p.connection.id IN ?2 AND p.user.id = ?3")
+    Page<Person> searchPersonsByNameAndConnection(String input, List<Integer> connection, int userId, Pageable paging);
 }

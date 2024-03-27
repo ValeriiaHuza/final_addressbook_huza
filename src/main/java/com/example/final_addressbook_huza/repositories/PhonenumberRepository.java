@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface PhonenumberRepository extends JpaRepository<Phonenumber, Integer> {
-
     @Query("select p from Phonenumber p where p.person.id = ?1")
     List<Phonenumber> findByPersonId(Integer id);
 

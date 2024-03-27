@@ -21,13 +21,23 @@ public class EducationController {
     @PostMapping("/add")
     public String add(@RequestParam(name = "person_id") int personId, Education education) {
         education.setPerson(personService.getPersonById(personId).orElseThrow(() -> new IllegalArgumentException("Person not found")));
+        System.out.println(education);
+
+        if (education.getEducationPlace().trim().isEmpty()) {
+            education.setEducationPlace(null);
+        }
+
+        if (education.getSpecialization().trim().isEmpty()) {
+            education.setSpecialization(null);
+        }
         educationService.addNewEducation(education);
+        System.out.println(education);
         return "redirect:/notebook/edit/" + personId;
     }
 
     @GetMapping("/delete")
     public String delete(@RequestParam(name = "education_id") int id, @RequestParam(name = "person_id") int personId) {
-        educationService.deletEducation(id);
+        educationService.deleteEducation(id);
         return "redirect:/notebook/edit/" + personId;
     }
 

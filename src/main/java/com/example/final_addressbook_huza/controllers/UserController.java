@@ -24,9 +24,7 @@ public class UserController {
 
     @GetMapping("/add")
     public String redirectToForm(Model model) {
-
         model.addAttribute("user", new NoteUser());
-
         return "user_form";
     }
 
@@ -38,10 +36,7 @@ public class UserController {
 
     @GetMapping("/edit/{id}")
     public String redirectToEditForm(@PathVariable("id") int id, Model model) {
-        NoteUser user = noteUserService.getUserById(id).orElseThrow(() -> new IllegalArgumentException("User not found"));
-
-        System.out.println(user.getName());
-        model.addAttribute("user", user);
+        model.addAttribute("user", noteUserService.getUserById(id).orElseThrow(() -> new IllegalArgumentException("User not found")));
         return "user_form";
     }
 

@@ -16,7 +16,7 @@ import java.util.Optional;
 @Service
 @AllArgsConstructor
 public class PersonService {
-
+    private static final int PAGE_NUMBER = 15;
     private final PersonRepository personRepository;
 
     public Page<Person> getPersonsByUser(int userId, int page, String sortField, String sortOrder, String input, List<Integer> connection) {
@@ -24,21 +24,21 @@ public class PersonService {
         Sort sort = sortOrder.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending() :
                 Sort.by(sortField).descending();
 
-        Pageable paging = PageRequest.of(page - 1, 15, sort);
-
-        if (connection != null && input != null && !connection.isEmpty() && !input.isEmpty()) {
-            return personRepository.searchPersonsByNameAndConnection(input, connection, userId, paging);
-        }
+        Pageable paging = PageRequest.of(page - 1, PAGE_NUMBER, sort);
 
         if (input != null && !input.isEmpty()) {
-            return personRepository.searchPersonsByName(input, userId, paging);
-        }
-
-        if (connection != null && !connection.isEmpty()) {
+             //input = input.toLowerCase();
+            System.out.println(input);
+            if (connection != null && !connection.isEmpty()) {
+                return personRepository.findByInputConnectionAndUserId(input, connection, userId, paging);
+            } else {
+                return personRepository.findByInputAndUserId(input, userId, paging);
+            }
+        } else if (connection != null && !connection.isEmpty()) {
             return personRepository.findByConnectionIdInAndUserId(connection, userId, paging);
+        } else {
+            return personRepository.findByUserId(userId, paging);
         }
-
-        return personRepository.findByUserId(userId, paging);
     }
 
     public Optional<Person> getPersonById(int userId) {

@@ -7,9 +7,7 @@ import org.springframework.stereotype.Service;
 @Service
 @AllArgsConstructor
 public class BirthdayWishService {
-
     private final BirthdayWishRepository birthdayWishRepository;
-
     public String getRandomBirthdayWish() {
         return birthdayWishRepository.getRandomBirthdayWish();
     }

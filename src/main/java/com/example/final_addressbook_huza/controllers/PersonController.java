@@ -144,8 +144,19 @@ public class PersonController {
                     .filter(educationJson -> !educationJson.getEducationPlace().trim().isEmpty() || !educationJson.getSpecialization().trim().isEmpty())
                     .forEach(educationJson -> {
                         Education education = new Education();
-                        education.setEducationPlace(educationJson.getEducationPlace());
-                        education.setSpecialization(educationJson.getSpecialization());
+                        if(educationJson.getEducationPlace().trim().isEmpty()){
+                            education.setEducationPlace(null);
+                        }
+                        else {
+                            education.setEducationPlace(educationJson.getEducationPlace());
+                        }
+
+                        if(educationJson.getSpecialization().trim().isEmpty()){
+                            education.setSpecialization(null);
+                        }
+                        else {
+                            education.setSpecialization(educationJson.getSpecialization());
+                        }
                         educationList.add(education);
                     });
 
@@ -153,8 +164,20 @@ public class PersonController {
                     .filter(jsonJobnumber -> !jsonJobnumber.getJobPlace().isEmpty() || !jsonJobnumber.getJobVacancy().isEmpty())
                     .forEach(jsonJobnumber -> {
                         Job job = new Job();
-                        job.setJobPlace(jsonJobnumber.getJobPlace());
-                        job.setVacancy(jsonJobnumber.getJobVacancy());
+                        if(jsonJobnumber.getJobPlace().trim().isEmpty()){
+                            job.setJobPlace(null);
+                        }
+                        else {
+                            job.setJobPlace(jsonJobnumber.getJobPlace());
+                        }
+
+                        if(jsonJobnumber.getJobVacancy().trim().isEmpty()){
+                            job.setVacancy(null);
+                        }
+                        else {
+                            job.setVacancy(jsonJobnumber.getJobVacancy());
+                        }
+
                         jobList.add(job);
                     });
 

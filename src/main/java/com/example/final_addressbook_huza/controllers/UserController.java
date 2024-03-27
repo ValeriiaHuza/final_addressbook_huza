@@ -1,12 +1,17 @@
 package com.example.final_addressbook_huza.controllers;
 
 
+import com.example.final_addressbook_huza.adapter.PersonAdapter;
+import com.example.final_addressbook_huza.data.Connection;
+import com.example.final_addressbook_huza.data.NoteUser;
 import com.example.final_addressbook_huza.services.NoteUserService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
 
 @Controller
 @AllArgsConstructor
@@ -21,5 +26,35 @@ public class UserController {
         model.addAttribute("users", noteUserService.getUsers());
 
         return "index";
+    }
+
+    @GetMapping("/add")
+    public String redirectToForm(Model model) {
+
+        model.addAttribute("user", new NoteUser());
+
+        return "user_form";
+    }
+
+    @PostMapping("/save")
+    public String save(NoteUser user) {
+        noteUserService.addNewUser(user);
+        return "redirect:/";
+    }
+
+    @GetMapping("/edit/{id}")
+    public String redirectToEditForm(@PathVariable("id") int id, Model model) {
+        NoteUser user = noteUserService.getUserById(id).orElseThrow( () -> new IllegalArgumentException("User not found"));
+
+        System.out.println(user.getName());
+        model.addAttribute("user", user);
+        return "user_form";
+    }
+
+
+    @GetMapping("/delete")
+    public String delete(@RequestParam(name = "user_id") int id) {
+        noteUserService.deleteUser(id);
+        return "redirect:/";
     }
 }

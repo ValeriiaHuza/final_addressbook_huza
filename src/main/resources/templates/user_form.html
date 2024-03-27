@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+    <title>Користувач</title>
+    <link rel="stylesheet" href="/css/mystyle.css">
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.3/dist/css/bootstrap.css}">
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap-icons/1.11.3/font/bootstrap-icons.css}">
+
+</head>
+<body>
+<div class="container-fluid py-4">
+
+
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="card mb-4">
+                <div class="card-body">
+
+<form th:action="@{/save}" th:object="${user}" method="post">
+    <div class="mb-3">
+        <label for="name" class="form-label">Імʼя</label>
+
+        <input type="hidden" th:field="*{id}" th:value="${user.id}">
+        <input type="text" th:field="*{name}" class="form-control" id="name" required>
+
+        <label for="login" class="form-label">Логін</label>
+        <input type="text" th:field="*{login}" class="form-control" id="login" required>
+
+        <label for="password" class="form-label"> Пароль</label>
+        <input type="text" th:field="*{password}" class="form-control" id="password" required>
+
+    </div>
+    <button type="submit" class="btn btn-primary"> <span th:if="${user.id == null }">Додати</span><span th:unless="${user.id == null}">Редагувати</span>
+    </button>
+</form>
+</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script th:src="@{/webjars/bootstrap/5.3.3/dist/js/bootstrap.bundle.js}"></script>
+
+</body>
+</html>

@@ -65,12 +65,13 @@ public class PersonController {
         model.addAttribute("sortOrder", sortOrder);
         model.addAttribute("reverseSortDir", sortOrder.equals("asc") ? "desc" : "asc");
 
+        System.out.println("pages" + pagePerson.getTotalPages());
         model.addAttribute("persons", newList);
         model.addAttribute("user", user);
         model.addAttribute("birthday", birthdays);
         model.addAttribute("currentPage", pagePerson.getNumber() + 1);
         model.addAttribute("totalItems", pagePerson.getTotalElements());
-        model.addAttribute("totalPages", pagePerson.getTotalPages());
+        model.addAttribute("totalPages", pagePerson.getTotalPages() == 0 ? 1 : pagePerson.getTotalPages() );
         List<Connection> connetionList = connectionService.getConnections();
         model.addAttribute("connections", connetionList);
 

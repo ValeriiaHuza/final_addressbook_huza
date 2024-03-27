@@ -21,4 +21,12 @@ public class NoteUserService {
     public Optional<NoteUser> getUserById(int userId) {
         return noteUserRepository.findById(userId);
     }
+
+    public void deleteUser(int id) {
+         noteUserRepository.deleteById(id);
+    }
+
+    public void addNewUser(NoteUser user) {
+        noteUserRepository.save(user);
+    }
 }

@@ -67,7 +67,8 @@
                     Сортувати
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="sortDropdown">
-                    <li><a class="dropdown-item" href="#" data-sort-field="lastModified">За останнім редагуванням</a></li>
+                    <li><a class="dropdown-item" href="#" data-sort-field="lastModified">За останнім редагуванням</a>
+                    </li>
                     <li><a class="dropdown-item" href="#" data-sort-field="firstName">За ім'ям</a></li>
                     <li><a class="dropdown-item" href="#" data-sort-field="lastName">За прізвищем</a></li>
                     <li><a class="dropdown-item" href="#" data-sort-field="surname">За по-батькові</a></li>
@@ -210,7 +211,9 @@
 
 
         <div class="offcanvas-header">
-            <div><button type="button" class="btn btn-warning m-1" id="removeAllFilter">Скинути всі фільтри</button></div>
+            <div>
+                <button type="button" class="btn btn-warning m-1" id="removeAllFilter">Скинути всі фільтри</button>
+            </div>
             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Закрити"></button>
         </div>
 
@@ -300,7 +303,7 @@
         let currentPage = +$('#currentPage').val();
         let totalPages = +$('#totalPages').val();
 
-        $('#removeAllFilter').click(function() {
+        $('#removeAllFilter').click(function () {
             // Navigate to another URL
             window.location.href = '/notebook/user/' + userId;
 
@@ -310,12 +313,12 @@
             event.preventDefault(); // Prevent default form submission
 
             let inputSearch = $('#inputSearch').val();
-            window.location.href = generateHrefWithPage(1,userId, inputSearch, connections,sortField,sortOrder); // Redirect to the constructed URL
+            window.location.href = generateHrefWithPage(1, userId, inputSearch, connections, sortField, sortOrder); // Redirect to the constructed URL
         });
 
-        $('.dropdown-item').click(function() {
+        $('.dropdown-item').click(function () {
             const sort = $(this).data('sort-field');
-            const href = generateHrefWithPage(1,userId, input, connections, sort, $('#orderDesc').val());
+            const href = generateHrefWithPage(1, userId, input, connections, sort, $('#orderDesc').val());
             console.log(href);
             $(this).attr('href', href);
         });

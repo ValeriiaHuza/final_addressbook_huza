@@ -34,7 +34,8 @@
                     <form id="myform" th:action="@{/notebook/save/{user_id}(user_id=${user.getId()})}"
                           th:object="${person}" method="post">
 
-                        <div id="validationAlert1" class="alert alert-danger alert-dismissible fade show" role="alert" style="display: none;">
+                        <div id="validationAlert1" class="alert alert-danger alert-dismissible fade show" role="alert"
+                             style="display: none;">
                             <!-- Close button -->
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                             <!-- Alert message content -->
@@ -61,10 +62,11 @@
                         </div>
                         <div class="mb-3">
                             <label for="email" class="form-label"><i class="bi bi-envelope mx-1"></i>Email</label>
-                            <input type="email" th:field="*{email}" class="form-control" id="email" >
+                            <input type="email" th:field="*{email}" class="form-control" id="email">
                         </div>
                         <div class="mb-3">
-                            <label for="connection" class="form-label" ><i class="bi bi-person-badge mx-1"></i>Тип знайомства</label>
+                            <label for="connection" class="form-label"><i class="bi bi-person-badge mx-1"></i>Тип
+                                знайомства</label>
                             <select th:field="*{connectionId}" class="form-select" id="connection">
                                 <th:block th:each="connection : ${connections}">
                                     <option th:text="${connection.title}" th:value="${connection.id}"></option>
@@ -73,28 +75,34 @@
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label for="personDescription" class="form-label"><i class="bi bi-person-vcard mx-1"></i>Персональні характеристики</label>
+                            <label for="personDescription" class="form-label"><i class="bi bi-person-vcard mx-1"></i>Персональні
+                                характеристики</label>
                             <textarea class="form-control" th:field="*{personDescription}" id="personDescription"
                                       rows="3"></textarea>
                         </div>
                         <div class="mb-3">
-                            <label for="birthday" class="form-label"><i class="bi bi-calendar-event mx-1"></i>День народження</label>
+                            <label for="birthday" class="form-label"><i class="bi bi-calendar-event mx-1"></i>День
+                                народження</label>
                             <input type="date" th:field="*{birthday}" class="form-control" id="birthday">
                         </div>
 
                         <div class="mb-3">
-                            <div id="validationAlert2" class="alert alert-danger alert-dismissible fade show" role="alert" style="display: none;">
+                            <div id="validationAlert2" class="alert alert-danger alert-dismissible fade show"
+                                 role="alert" style="display: none;">
                                 <!-- Close button -->
-                                <button type="button" id="closeButton2" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                <button type="button" id="closeButton2" class="btn-close" data-bs-dismiss="alert"
+                                        aria-label="Close"></button>
                                 <!-- Alert message content -->
                                 <span id="validationMessage2"></span>
                             </div>
 
                             <div id="phoneNumbers">
-                                <label for="phoneNumber" class="form-label"><i class="bi bi-phone mx-1"></i>Номер телефону</label>
+                                <label for="phoneNumber" class="form-label"><i class="bi bi-phone mx-1"></i>Номер
+                                    телефону</label>
                                 <small>(Формат: +380XXXXXXXXX)</small>
                                 <div class="phoneInput input-group mb-3">
-                                    <input name="phone" type="tel" class="form-control phoneNumber" id="phoneNumber" pattern="^\+380\d{9}$">
+                                    <input name="phone" type="tel" class="form-control phoneNumber" id="phoneNumber"
+                                           pattern="^\+380\d{9}$">
                                 </div>
                             </div>
                             <button type="button" class="btn btn-secondary my-1" onclick="addPhoneNumber()">Додати номер
@@ -114,9 +122,10 @@
                                                    placeholder="Місце освіти">
                                             <input name="specialization" type="text" class="form-control mb-3"
                                                    placeholder="Спеціалізація">
-                                            </div>
+                                        </div>
                                     </div>
-                                    <button type="button" class="btn btn-secondary my-1" onclick="addEducation()">Додати ще одне
+                                    <button type="button" class="btn btn-secondary my-1" onclick="addEducation()">Додати
+                                        ще одне
                                         навчання
                                     </button>
 
@@ -138,7 +147,8 @@
                                                    placeholder="Посада">
                                         </div>
                                     </div>
-                                    <button type="button" class="btn btn-secondary my-1" onclick="addJob()">Додати ще одну
+                                    <button type="button" class="btn btn-secondary my-1" onclick="addJob()">Додати ще
+                                        одну
                                         роботу
                                     </button>
 
@@ -161,7 +171,6 @@
 <script>
 
 
-
     function removeJob(button) {
         button.closest('.job-inputs').remove();
     }
@@ -180,7 +189,7 @@
         educationInputs.innerHTML =
             '<hr/>' +
 
-            '<button type="button" class="btn-close" aria-label="Close" onclick="removeEducation(this)"></button>'+
+            '<button type="button" class="btn-close" aria-label="Close" onclick="removeEducation(this)"></button>' +
             '<input name="educationPlace" type="text" class="form-control mb-3" placeholder="Місце освіти">' +
             '<input name="specialization" type="text" class="form-control mb-3" placeholder="Спеціалізація">';
         document.getElementById('educations').appendChild(educationInputs);
@@ -191,7 +200,7 @@
         jobInputs.classList.add('job-inputs', 'mb-3');
         jobInputs.innerHTML =
             '<hr/>' +
-            '<button type="button" class="btn-close" aria-label="Close" onclick="removeJob(this)"></button>'+
+            '<button type="button" class="btn-close" aria-label="Close" onclick="removeJob(this)"></button>' +
             '<input name="jobPlace" type="text" class="form-control mb-3" placeholder="Місце роботи">' +
             '<input name="jobVacancy" type="text" class="form-control mb-3" placeholder="Посада">';
         document.getElementById('jobs').appendChild(jobInputs);
@@ -232,17 +241,17 @@
     }
 
     const closeButton = document.getElementById('validationAlert1').querySelector('.btn-close');
-    closeButton.addEventListener('click', function() {
+    closeButton.addEventListener('click', function () {
         hideValidationAlert(); // Hide the alert when the close button is clicked
     });
 
     const closeButton2 = document.getElementById('validationAlert2').querySelector('#closeButton2');
-    closeButton2.addEventListener('click', function() {
+    closeButton2.addEventListener('click', function () {
         hideValidationAlert2(); // Hide the alert when the close button is clicked
     });
 
-    document.getElementById('myform').querySelectorAll('input, select, textarea').forEach(function(input) {
-        input.addEventListener('input', function() {
+    document.getElementById('myform').querySelectorAll('input, select, textarea').forEach(function (input) {
+        input.addEventListener('input', function () {
             hideValidationAlert(); // Hide validation message when user starts typing
             hideValidationAlert2()
         });
@@ -250,20 +259,20 @@
 
     function collect() {
 
-        if (!document.getElementById('myform').checkValidity()){
+        if (!document.getElementById('myform').checkValidity()) {
 
-            if(document.getElementById('firstName').value.trim() === '') {
+            if (document.getElementById('firstName').value.trim() === '') {
                 showValidationAlert("Заповніть імʼя! Це обовʼязкове поле");
                 return;
             }
 
-            if(!document.getElementById('email').checkValidity()) {
+            if (!document.getElementById('email').checkValidity()) {
                 showValidationAlert("Некорректно введений емейл");
                 return;
             }
 
             let phoneInputs = document.querySelectorAll('.phoneNumber');
-            phoneInputs.forEach(function(input) {
+            phoneInputs.forEach(function (input) {
                 // Check if the input value matches the pattern
                 if (!input.checkValidity()) {
                     showValidationAlert2("Некорректно введений номер телефону");
@@ -306,7 +315,7 @@
 
         let combinedData = {
             "phoneNumbers": phoneNumbers,
-            "educations" : education,
+            "educations": education,
             "jobs": jobs
         };
 

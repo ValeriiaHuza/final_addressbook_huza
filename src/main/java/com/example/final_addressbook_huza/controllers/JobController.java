@@ -1,10 +1,8 @@
 package com.example.final_addressbook_huza.controllers;
 
 import com.example.final_addressbook_huza.data.Job;
-import com.example.final_addressbook_huza.data.Phonenumber;
 import com.example.final_addressbook_huza.services.JobService;
 import com.example.final_addressbook_huza.services.PersonService;
-import com.example.final_addressbook_huza.services.PhoneNumberService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,24 +19,24 @@ public class JobController {
 
     @PostMapping("/add")
     public String add(@RequestParam(name = "person_id") int personId, Job job) {
-        job.setPerson(personService.getPersonById(personId).orElseThrow( () -> new IllegalArgumentException("Person not found")));
+        job.setPerson(personService.getPersonById(personId).orElseThrow(() -> new IllegalArgumentException("Person not found")));
 
-        if(job.getJobPlace().trim().isEmpty()){
+        if (job.getJobPlace().trim().isEmpty()) {
             job.setJobPlace(null);
         }
 
-        if(job.getVacancy().trim().isEmpty()){
+        if (job.getVacancy().trim().isEmpty()) {
             job.setVacancy(null);
         }
 
         jobService.addNewJob(job);
-        return "redirect:/notebook/edit/"+personId;
+        return "redirect:/notebook/edit/" + personId;
     }
 
     @GetMapping("/delete")
-    public String delete(@RequestParam(name = "job_id") int id,@RequestParam(name = "person_id") int personId) {
+    public String delete(@RequestParam(name = "job_id") int id, @RequestParam(name = "person_id") int personId) {
         jobService.deleteJob(id);
-        return "redirect:/notebook/edit/"+personId;
+        return "redirect:/notebook/edit/" + personId;
     }
 
 }

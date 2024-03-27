@@ -6,169 +6,209 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
     <title>Детальна інформація</title>
-    <link rel="stylesheet" href="/css/mystyle.css" >
+    <link rel="stylesheet" href="/css/mystyle.css">
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.3/dist/css/bootstrap.css}">
     <link rel="stylesheet" th:href="@{/webjars/bootstrap-icons/1.11.3/font/bootstrap-icons.css}">
 
 </head>
 <body>
-    <div class="container-fluid py-4">
-        <div class="row justify-content-center">
-            <div class="col">
-                <nav aria-label="breadcrumb" class="bg-light rounded-3 p-3 mb-4">
-                    <ol class="breadcrumb mb-0">
-                        <li class="breadcrumb-item"><a th:href="@{/notebook/user/{user_id}(user_id=${person.getNoteUser()})}">Записна книжка</a></li>
-                        <li class="breadcrumb-item active" aria-current="page" th:text="${person.getFirstName() + ' ' + person.getLastName() + ' ' + person.getSurname()}"></li>
-                    </ol>
-                </nav>
-            </div>
+<div class="container-fluid py-4">
+    <div class="row justify-content-center">
+        <div class="col">
+            <nav aria-label="breadcrumb" class="bg-light rounded-3 p-3 mb-4">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><a
+                            th:href="@{/notebook/user/{user_id}(user_id=${person.getNoteUser()})}">Записна книжка</a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page"
+                        th:text="${person.getFirstName() + ' ' + person.getLastName() + ' ' + person.getSurname()}"></li>
+                </ol>
+            </nav>
         </div>
+    </div>
 
-        <div class="row justify-content-center">
-            <div class="col-lg-7">
-                <div class="card mb-4">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-sm-3">
-                                <p class="mb-0"><i class="bi bi-person mx-1"></i>Імʼя</p>
-                            </div>
-                            <div class="col-sm-9">
-                                <p class="text-muted mb-0" th:text="${person.getFirstName()}"></p>
-                            </div>
+    <div class="row justify-content-center">
+        <div class="col-lg-7">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <p class="mb-0"><i class="bi bi-person mx-1"></i>Імʼя</p>
                         </div>
-                        <hr>
-                        <div class="row">
-                            <div class="col-sm-3">
-                                <p class="mb-0"><i class="bi bi-person mx-1"></i>Прізвище</p>
-                            </div>
-                            <div class="col-sm-9">
-                                <p class="text-muted mb-0" th:text="${person.getLastName()}"></p>
-                            </div>
+                        <div class="col-sm-9">
+                            <p class="text-muted mb-0" th:text="${person.getFirstName()}"></p>
                         </div>
-                        <hr>
-                        <div class="row">
-                            <div class="col-sm-3">
-                                <p class="mb-0"><i class="bi bi-person mx-1"></i>По-батькові</p>
-                            </div>
-                            <div class="col-sm-9">
-                                <p class="text-muted mb-0" th:text="${person.getSurname()}"></p>
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row">
-                            <div class="col-sm-3">
-                                <p class="mb-0"><i class="bi bi-envelope mx-1"></i>Email</p>
-                            </div>
-                            <div class="col-sm-9">
-                                <p class="text-muted mb-0" th:text="${person.getEmail()}"></p>
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row">
-                            <div class="col-sm-3">
-                                <p class="mb-0"><i class="bi bi-house mx-1"></i>Адреса</p>
-                            </div>
-                            <div class="col-sm-9">
-                                <p class="text-muted mb-0" th:text="${person.getAddress()}"></p>
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row">
-                            <div class="col-sm-3">
-                                <p class="mb-0"><i class="bi bi-person-badge mx-1"></i>Тип знайомства</p>
-                            </div>
-                            <div class="col-sm-9">
-                                <p class="text-muted mb-0" th:text="${person.getConnection()}"></p>
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row" th:if="${person.getPhonenumbers().isEmpty()}">
-                            <div class="col-sm-3">
-                                <p class="mb-0"><i class="bi bi-telephone mx-1"></i>Телефон</p>
-                            </div>
-                        </div>
-                        <div class="row" th:each="phone,i : ${person.getPhonenumbers()}">
-                            <div class="col-sm-3" th:if="${i.index==0}">
-                                <p class="mb-0"><i class="bi bi-telephone mx-1"></i>Телефон</p>
-                            </div>
-
-                            <div class="col-sm-3" th:if="${i.index!=0}">
-                            </div>
-                            <div class="col-sm-9">
-                                    <p class="text-muted mb-0"  th:text="${phone}"></p>
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row">
-                            <div class="col-sm-3">
-                                <p class="mb-0"><i class="bi bi-person-vcard mx-1"></i>Персональні характеристики</p>
-                            </div>
-                            <div class="col-sm-9">
-                                <p class="text-muted mb-0" th:text="${person.getPersonDescription()}"></p>
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row">
-                            <div class="col-sm-3">
-                                <p class="mb-0"><i class="bi bi-calendar-event mx-1"></i>День народження</p>
-                            </div>
-                            <div class="col-sm-9">
-                                <p class="text-muted mb-0" th:text="${person.getBirthday()}"></p>
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row">
-                            <div class="col-sm-3">
-                                <p class="mb-0"><i class="bi bi-pencil mx-1"></i>Останнє редагування</p>
-                            </div>
-                            <div class="col-sm-9">
-                                <p class="text-muted mb-0" th:text="${person.getLastModified()}"></p>
-                            </div>
-                        </div>
-
                     </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <p class="mb-0"><i class="bi bi-person mx-1"></i>Прізвище</p>
+                        </div>
+                        <div class="col-sm-9">
+                            <p class="text-muted mb-0" th:text="${person.getLastName()}"></p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <p class="mb-0"><i class="bi bi-person mx-1"></i>По-батькові</p>
+                        </div>
+                        <div class="col-sm-9">
+                            <p class="text-muted mb-0" th:text="${person.getSurname()}"></p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <p class="mb-0"><i class="bi bi-envelope mx-1"></i>Email</p>
+                        </div>
+                        <div class="col-sm-9">
+                            <p class="text-muted mb-0" th:text="${person.getEmail()}"></p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <p class="mb-0"><i class="bi bi-house mx-1"></i>Адреса</p>
+                        </div>
+                        <div class="col-sm-9">
+                            <p class="text-muted mb-0" th:text="${person.getAddress()}"></p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <p class="mb-0"><i class="bi bi-person-badge mx-1"></i>Тип знайомства</p>
+                        </div>
+                        <div class="col-sm-9">
+                            <p class="text-muted mb-0" th:text="${person.getConnection()}"></p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row" th:if="${person.getPhonenumbers().isEmpty()}">
+                        <div class="col-sm-3">
+                            <p class="mb-0"><i class="bi bi-telephone mx-1"></i>Телефон</p>
+                        </div>
+                    </div>
+                    <div class="row" th:each="phone,i : ${person.getPhonenumbers()}">
+                        <div class="col-sm-3" th:if="${i.index==0}">
+                            <p class="mb-0"><i class="bi bi-telephone mx-1"></i>Телефон</p>
+                        </div>
+
+                        <div class="col-sm-3" th:if="${i.index!=0}">
+                        </div>
+                        <div class="col-sm-9">
+                            <p class="text-muted mb-0" th:text="${phone}"></p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <p class="mb-0"><i class="bi bi-person-vcard mx-1"></i>Персональні характеристики</p>
+                        </div>
+                        <div class="col-sm-9">
+                            <p class="text-muted mb-0" th:text="${person.getPersonDescription()}"></p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <p class="mb-0"><i class="bi bi-calendar-event mx-1"></i>День народження</p>
+                        </div>
+                        <div class="col-sm-9">
+                            <p class="text-muted mb-0" th:text="${person.getBirthday()}"></p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <p class="mb-0"><i class="bi bi-pencil mx-1"></i>Останнє редагування</p>
+                        </div>
+                        <div class="col-sm-9">
+                            <p class="text-muted mb-0" th:text="${person.getLastModified()}"></p>
+                        </div>
+                    </div>
+
                 </div>
-                <div class="row mb-4">
-                    <div class="col-md-6 d-flex">
-                        <div class="card flex-grow-1 mb-4 mb-md-0">
-                            <div class="card-body d-flex flex-column">
-                                <p class="mb-4"><i class="bi bi-briefcase mx-1"></i>Робота </p>
-                                <div th:each="job : ${person.getJobs()}">
-                                    <p class="mb-1" th:text="${job.getJobPlace() + ', ' + job.getVacancy()}"></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 d-flex">
-                        <div class="card flex-grow-1 mb-4 mb-md-0">
-                            <div class="card-body d-flex flex-column justify-content-between">
-                                <p class="mb-4"><i class="bi bi-book mx-1"></i>Освіта </p>
-                                <div th:each="education : ${person.getEducations()}">
-                                    <p class="mb-1" th:text="${education.getEducationPlace() + ', ' + education.getSpecialization()}"></p>
-                                </div>
+            </div>
+            <div class="row mb-4">
+                <div class="col-md-6 d-flex">
+                    <div class="card flex-grow-1 mb-4 mb-md-0">
+                        <div class="card-body d-flex flex-column">
+                            <p class="mb-4"><i class="bi bi-briefcase mx-1"></i>Робота </p>
+                            <div th:each="job : ${person.getJobs()}">
+                                <p class="mb-1" th:text="${job.getJobPlace() + ', ' + job.getVacancy()}"></p>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="row justify-content-center">
-                    <div class="col-md-auto">
-                        <a href="/" class="btn btn-lg btn-warning">
-                                <i class="bi bi-pencil mx-1"></i>
-                                <span class="mb-0">Редагувати</span>
-                        </a>
+                <div class="col-md-6 d-flex">
+                    <div class="card flex-grow-1 mb-4 mb-md-0">
+                        <div class="card-body d-flex flex-column justify-content-between">
+                            <p class="mb-4"><i class="bi bi-book mx-1"></i>Освіта </p>
+                            <div th:each="education : ${person.getEducations()}">
+                                <p class="mb-1"
+                                   th:text="${education.getEducationPlace() + ', ' + education.getSpecialization()}"></p>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-md-auto">
-                        <a href="/" class="btn btn-lg btn-danger">
-                            <i class="bi bi-trash mx-1"></i>
-                            <span class="mb-0">Видалити</span>
-                        </a>
-                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-md-auto">
+                    <a th:href="@{/notebook/edit/{person_id}(person_id=${person.id})}" href="/"
+                       class="btn btn-lg btn-warning">
+                        <i class="bi bi-pencil mx-1"></i>
+                        <span class="mb-0">Редагувати</span>
+                    </a>
+                </div>
+                <div class="col-md-auto">
+                    <a class="btn btn-lg btn-danger" data-bs-target="#myconfirm" data-bs-toggle="modal"
+                       th:attr="data-bs-link=@{/notebook/delete(person_id=${person.id},user_id=${person.getNoteUser()})}, data-bs-text=${person.getFirstName()}, data-bs-id=${person.id}">
+                        <i class="bi bi-trash mx-1"></i>
+                        <span class="mb-0">Видалити</span>
+                    </a>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
+<div class="modal fade" id="myconfirm" data-bs-backdrop="static" data-bs-keyboard="false"
+     tabindex="-1" aria-labelledby="staticWarningLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticWarningLabel">Попередження</h1>
+                <button type="button" class="btn-close" aria-label="Close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                Ви впевнені, що хочете видалити цей запис<br/>
+                Якщо ви натиснете видалити, цю дію <i>не можна відмінити</i>.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Відмінити</button>
+                <a class="btn btn-danger delete-button">Видалити</a>
+            </div>
+        </div>
+    </div>
+</div>
 
+<script>
+    let myConfirmDialog = document.getElementById('myconfirm')
+    myConfirmDialog.addEventListener('show.bs.modal', function (event) {
+        let button = event.relatedTarget
+        let link = button.getAttribute('data-bs-link')
+        let cid = button.getAttribute('data-bs-id')
+        let text = button.getAttribute('data-bs-text')
+        let modalTitle = myConfirmDialog.querySelector('.modal-title')
+        modalTitle.textContent = 'Видалити: ' + text + ' (' + cid + ')'
+        let deleteButton = myConfirmDialog.querySelector('.delete-button')
+        deleteButton.setAttribute('href', link)
+        let course = document.getElementById('course-txt')
+        course.textContent = text
+    })
+</script>
 
 <script th:src="@{/webjars/bootstrap/5.3.3/dist/js/bootstrap.bundle.js}"></script>
 

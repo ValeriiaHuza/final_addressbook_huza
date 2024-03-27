@@ -23,7 +23,7 @@ public class NoteUserService {
     }
 
     public void deleteUser(int id) {
-         noteUserRepository.deleteById(id);
+        noteUserRepository.deleteById(id);
     }
 
     public void addNewUser(NoteUser user) {

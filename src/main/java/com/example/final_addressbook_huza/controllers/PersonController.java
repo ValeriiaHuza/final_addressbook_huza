@@ -36,8 +36,8 @@ public class PersonController {
                                         @RequestParam(defaultValue = "1", name = "page") int page,
                                         @RequestParam(defaultValue = "id", name = "sort") String sortField,
                                         @RequestParam(defaultValue = "asc", name = "order") String sortOrder,
-                                        @RequestParam (defaultValue = "") List<Integer> connection,
-                                        @Param("input") String input){
+                                        @RequestParam(defaultValue = "") List<Integer> connection,
+                                        @Param("input") String input) {
 
         Optional<NoteUser> userOptional = noteUserService.getUserById(userId);
         NoteUser user = userOptional.get();
@@ -46,13 +46,13 @@ public class PersonController {
 
         Page<Person> pagePerson;
 
-        pagePerson = personService.getPersonsByUser(userId, page, sortField,sortOrder, input, connection);
+        pagePerson = personService.getPersonsByUser(userId, page, sortField, sortOrder, input, connection);
 
         personList = pagePerson.getContent();
 
         List<PersonAdapter> newList = new ArrayList<>();
 
-        for (Person person : personList){
+        for (Person person : personList) {
             newList.add(new PersonAdapter(Optional.ofNullable(person)));
         }
 
@@ -70,7 +70,7 @@ public class PersonController {
         model.addAttribute("birthday", birthdays);
         model.addAttribute("currentPage", pagePerson.getNumber() + 1);
         model.addAttribute("totalItems", pagePerson.getTotalElements());
-        model.addAttribute("totalPages", pagePerson.getTotalPages() == 0 ? 1 : pagePerson.getTotalPages() );
+        model.addAttribute("totalPages", pagePerson.getTotalPages() == 0 ? 1 : pagePerson.getTotalPages());
         List<Connection> connetionList = connectionService.getConnections();
         model.addAttribute("connections", connetionList);
         model.addAttribute("connectionFilter", connection);
@@ -116,25 +116,25 @@ public class PersonController {
             extractDataFromJson(jsonData, phoneNumbersList, jobList, educationList);
         }
 
-        Person personCreated =  personService.addNewPerson(newPerson);
+        Person personCreated = personService.addNewPerson(newPerson);
 
-        for(Phonenumber phone : phoneNumbersList ) {
+        for (Phonenumber phone : phoneNumbersList) {
             phone.setPerson(personCreated);
             phoneNumberService.addNewPhoneNumber(phone);
         }
 
-        for(Job job : jobList ) {
+        for (Job job : jobList) {
             job.setPerson(personCreated);
             jobService.addNewJob(job);
         }
 
-        for (Education education : educationList){
+        for (Education education : educationList) {
             education.setPerson(personCreated);
             educationService.addNewEducation(education);
         }
 
         System.out.println(personCreated.toString());
-        return "redirect:/notebook/user/"+userId;
+        return "redirect:/notebook/user/" + userId;
     }
 
     @PostMapping("/edit")
@@ -142,11 +142,11 @@ public class PersonController {
 
         System.out.println(person);
 
-        Person newPerson = createPerson(person.getNoteUser(),person);
-        Person personCreated =  personService.addNewPerson(newPerson);
+        Person newPerson = createPerson(person.getNoteUser(), person);
+        Person personCreated = personService.addNewPerson(newPerson);
 
         System.out.println(personCreated.toString());
-        return "redirect:/notebook/edit/"+personCreated.getId();
+        return "redirect:/notebook/edit/" + personCreated.getId();
     }
 
     private void extractDataFromJson(String jsonData, List<Phonenumber> phoneNumbersList, List<Job> jobList, List<Education> educationList) {
@@ -156,7 +156,7 @@ public class PersonController {
 
             data.getPhoneNumbers().forEach(number -> {
                 Phonenumber phone = new Phonenumber();
-                if(!number.trim().isEmpty()) {
+                if (!number.trim().isEmpty()) {
                     phone.setPhone(number);
                     phoneNumbersList.add(phone);
                 }
@@ -164,29 +164,29 @@ public class PersonController {
 
             data.getEducations().forEach(educationJson -> {
                 Education education = new Education();
-                if(!educationJson.getEducationPlace().trim().isEmpty()) {
+                if (!educationJson.getEducationPlace().trim().isEmpty()) {
                     education.setEducationPlace(educationJson.getEducationPlace());
                 }
-                if(!educationJson.getSpecialization().trim().isEmpty()) {
+                if (!educationJson.getSpecialization().trim().isEmpty()) {
                     education.setSpecialization(educationJson.getSpecialization());
                 }
 
-                if(education.getEducationPlace() !=null || education.getSpecialization()!=null ){
+                if (education.getEducationPlace() != null || education.getSpecialization() != null) {
                     educationList.add(education);
                 }
             });
 
             data.getJobs().forEach(jsonJobnumber -> {
                 Job job = new Job();
-                if(!jsonJobnumber.getJobPlace().isEmpty()){
+                if (!jsonJobnumber.getJobPlace().isEmpty()) {
                     job.setJobPlace(jsonJobnumber.getJobPlace());
                 }
 
-                if(!jsonJobnumber.getJobVacancy().isEmpty()){
+                if (!jsonJobnumber.getJobVacancy().isEmpty()) {
                     job.setVacancy(jsonJobnumber.getJobVacancy());
                 }
 
-                if(job.getJobPlace()!=null || job.getVacancy()!=null){
+                if (job.getJobPlace() != null || job.getVacancy() != null) {
                     jobList.add(job);
                 }
             });
@@ -201,37 +201,37 @@ public class PersonController {
 
         Person newPerson = new Person();
 
-        newPerson.setUser(noteUserService.getUserById(userId).orElseThrow( () -> new IllegalArgumentException("User not found")));
+        newPerson.setUser(noteUserService.getUserById(userId).orElseThrow(() -> new IllegalArgumentException("User not found")));
         newPerson.setFirstName(person.getFirstName());
-        if(person.getLastName()!=null && !person.getLastName().isEmpty()) {
+        if (person.getLastName() != null && !person.getLastName().isEmpty()) {
             newPerson.setLastName(person.getLastName());
         }
 
-        if(person.getId()!=null){
+        if (person.getId() != null) {
             newPerson.setId(person.getId());
         }
 
-        if(person.getSurname()!=null && !person.getSurname().isEmpty()) {
+        if (person.getSurname() != null && !person.getSurname().isEmpty()) {
             newPerson.setSurname(person.getSurname());
         }
 
-        if(person.getAddress()!=null && !person.getAddress().isEmpty()) {
+        if (person.getAddress() != null && !person.getAddress().isEmpty()) {
             newPerson.setAddress(person.getAddress());
         }
 
-        if(person.getEmail()!=null && !person.getEmail().isEmpty()) {
+        if (person.getEmail() != null && !person.getEmail().isEmpty()) {
             newPerson.setEmail(person.getEmail());
         }
 
-        if(person.getPersonDescription()!=null && !person.getPersonDescription().isEmpty()) {
+        if (person.getPersonDescription() != null && !person.getPersonDescription().isEmpty()) {
             newPerson.setPersonDescription(person.getPersonDescription());
         }
 
-        if(person.getBirthday()!=null && !person.getBirthday().isEmpty()) {
+        if (person.getBirthday() != null && !person.getBirthday().isEmpty()) {
             newPerson.setBirthday(LocalDate.parse(person.getBirthday()));
         }
 
-        if(person.getConnectionId()!=null && person.getConnectionId()!=0) {
+        if (person.getConnectionId() != null && person.getConnectionId() != 0) {
             newPerson.setConnection(connectionService.getConnectionById(person.getConnectionId()).get());
         }
 
@@ -239,9 +239,9 @@ public class PersonController {
     }
 
     @GetMapping("/delete")
-    public String delete(@RequestParam(name = "person_id") int id,@RequestParam(name = "user_id") int userId) {
+    public String delete(@RequestParam(name = "person_id") int id, @RequestParam(name = "user_id") int userId) {
         personService.deletePerson(id);
-        return "redirect:/notebook/user/"+userId;
+        return "redirect:/notebook/user/" + userId;
     }
 
     @GetMapping("/edit/{person_id}")
@@ -257,7 +257,7 @@ public class PersonController {
         List<Phonenumber> phonenumberList = phoneNumberService.getPhonesByUserId(id);
         model.addAttribute("phones", phonenumberList);
 
-        model.addAttribute("phone",new Phonenumber());
+        model.addAttribute("phone", new Phonenumber());
         model.addAttribute("education", new Education());
         model.addAttribute("job", new Job());
 

@@ -32,7 +32,8 @@
                     <form id="myform" th:action="@{/notebook/edit}"
                           th:object="${person}" method="post">
 
-                        <div id="validationAlert1" class="alert alert-danger alert-dismissible fade show" role="alert" style="display: none;">
+                        <div id="validationAlert1" class="alert alert-danger alert-dismissible fade show" role="alert"
+                             style="display: none;">
                             <!-- Close button -->
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                             <!-- Alert message content -->
@@ -62,7 +63,8 @@
                             <input type="email" th:field="*{email}" class="form-control" id="email">
                         </div>
                         <div class="mb-3">
-                            <label for="connection" class="form-label"><i class="bi bi-person-badge mx-1"></i>Тип знайомства</label>
+                            <label for="connection" class="form-label"><i class="bi bi-person-badge mx-1"></i>Тип
+                                знайомства</label>
                             <select th:field="*{connectionId}" class="form-select" id="connection">
                                 <th:block th:each="connection : ${connections}">
                                     <option th:text="${connection.title}" th:value="${connection.id}"></option>
@@ -71,12 +73,14 @@
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label for="personDescription" class="form-label"><i class="bi bi-person-vcard mx-1"></i>Персональні характеристики</label>
+                            <label for="personDescription" class="form-label"><i class="bi bi-person-vcard mx-1"></i>Персональні
+                                характеристики</label>
                             <textarea class="form-control" th:field="*{personDescription}" id="personDescription"
                                       rows="3"></textarea>
                         </div>
                         <div class="mb-3">
-                            <label for="birthday" class="form-label"><i class="bi bi-calendar-event mx-1"></i>День народження</label>
+                            <label for="birthday" class="form-label"><i class="bi bi-calendar-event mx-1"></i>День
+                                народження</label>
                             <input type="date" th:field="*{birthday}" class="form-control" id="birthday">
                         </div>
                         <div class="text-center">
@@ -233,9 +237,11 @@
                 <form id="editEducationForm" action="/editEducation" th:object="${education}" method="post">
                     <div class="mb-3">
                         <label for="educationPlaceE" class="form-label">Міце навчання</label>
-                        <input type="text" th:field="*{educationPlace}" class="form-control" id="educationPlaceE" name="educationPlace" required>
+                        <input type="text" th:field="*{educationPlace}" class="form-control" id="educationPlaceE"
+                               name="educationPlace" required>
                         <label for="specializationE" class="form-label">Спеціалізаія</label>
-                        <input type="text" th:field="*{specialization}" class="form-control" id="specializationE" name="specialization">
+                        <input type="text" th:field="*{specialization}" class="form-control" id="specializationE"
+                               name="specialization">
 
                         <input type="hidden" th:field="*{id}" id="educationIdE" name="educationId"/>
                     </div>
@@ -258,7 +264,8 @@
                 <form id="editJobForm" action="/editJob" th:object="${job}" method="post">
                     <div class="mb-3">
                         <label for="jobPlaceE" class="form-label">Міце роботи</label>
-                        <input type="text" th:field="*{jobPlace}" class="form-control" id="jobPlaceE" name="jobPlace" required>
+                        <input type="text" th:field="*{jobPlace}" class="form-control" id="jobPlaceE" name="jobPlace"
+                               required>
                         <label for="vacancyE" class="form-label">Вакансія</label>
                         <input type="text" th:field="*{vacancy}" class="form-control" id="vacancyE" name="vacancy">
 
@@ -303,9 +310,11 @@
                 <form id="addEducationForm" action="/addEducation" th:object="${education}" method="post">
                     <div class="mb-3">
                         <label for="educationPlaceA" class="form-label">Міце навчання</label>
-                        <input type="text" th:field="*{educationPlace}" class="form-control" id="educationPlaceA" name="educationPlace" required>
+                        <input type="text" th:field="*{educationPlace}" class="form-control" id="educationPlaceA"
+                               name="educationPlace" required>
                         <label for="specializationA" class="form-label">Спеціалізаія</label>
-                        <input type="text" th:field="*{specialization}" class="form-control" id="specializationA" name="specialization">
+                        <input type="text" th:field="*{specialization}" class="form-control" id="specializationA"
+                               name="specialization">
                     </div>
                     <button type="submit" class="btn btn-primary">Додати</button>
                 </form>
@@ -326,7 +335,8 @@
                 <form id="addJobForm" action="/addJob" th:object="${job}" method="post">
                     <div class="mb-3">
                         <label for="jobPlaceA" class="form-label">Міце роботи</label>
-                        <input type="text" th:field="*{jobPlace}" class="form-control" id="jobPlaceA" name="jobPlace" required>
+                        <input type="text" th:field="*{jobPlace}" class="form-control" id="jobPlaceA" name="jobPlace"
+                               required>
                         <label for="vacancyA" class="form-label">Вакансія</label>
                         <input type="text" th:field="*{vacancy}" class="form-control" id="vacancyA" name="vacancy">
                     </div>
@@ -391,7 +401,7 @@
         let hiddenInput = myJobEdit.querySelector("#jobIdE");
         hiddenInput.value = educationId;
 
-        let placeInput= myJobEdit.querySelector("#jobPlaceE");
+        let placeInput = myJobEdit.querySelector("#jobPlaceE");
         placeInput.value = place;
 
         let vacancyInput = myJobEdit.querySelector("#vacancyE");

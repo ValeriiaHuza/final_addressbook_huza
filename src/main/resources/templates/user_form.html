@@ -19,24 +19,26 @@
             <div class="card mb-4">
                 <div class="card-body">
 
-<form th:action="@{/save}" th:object="${user}" method="post">
-    <div class="mb-3">
-        <label for="name" class="form-label">Імʼя</label>
+                    <form th:action="@{/save}" th:object="${user}" method="post">
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Імʼя</label>
 
-        <input type="hidden" th:field="*{id}" th:value="${user.id}">
-        <input type="text" th:field="*{name}" class="form-control" id="name" required>
+                            <input type="hidden" th:field="*{id}" th:value="${user.id}">
+                            <input type="text" th:field="*{name}" class="form-control" id="name" required>
 
-        <label for="login" class="form-label">Логін</label>
-        <input type="text" th:field="*{login}" class="form-control" id="login" required>
+                            <label for="login" class="form-label">Логін</label>
+                            <input type="text" th:field="*{login}" class="form-control" id="login" required>
 
-        <label for="password" class="form-label"> Пароль</label>
-        <input type="text" th:field="*{password}" class="form-control" id="password" required>
+                            <label for="password" class="form-label"> Пароль</label>
+                            <input type="text" th:field="*{password}" class="form-control" id="password" required>
 
-    </div>
-    <button type="submit" class="btn btn-primary"> <span th:if="${user.id == null }">Додати</span><span th:unless="${user.id == null}">Редагувати</span>
-    </button>
-</form>
-</div>
+                        </div>
+                        <button type="submit" class="btn btn-primary"><span
+                                th:if="${user.id == null }">Додати</span><span
+                                th:unless="${user.id == null}">Редагувати</span>
+                        </button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>

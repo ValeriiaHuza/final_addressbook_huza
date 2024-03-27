@@ -18,6 +18,7 @@ import java.util.Optional;
 public class PersonService {
 
     private final PersonRepository personRepository;
+
     public Page<Person> getPersonsByUser(int userId, int page, String sortField, String sortOrder, String input, List<Integer> connection) {
 
         Sort sort = sortOrder.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending() :
@@ -25,7 +26,7 @@ public class PersonService {
 
         Pageable paging = PageRequest.of(page - 1, 15, sort);
 
-        if(connection!=null && input!=null && !connection.isEmpty() && !input.isEmpty()) {
+        if (connection != null && input != null && !connection.isEmpty() && !input.isEmpty()) {
             return personRepository.searchPersonsByNameAndConnection(input, connection, userId, paging);
         }
 
@@ -33,7 +34,7 @@ public class PersonService {
             return personRepository.searchPersonsByName(input, userId, paging);
         }
 
-        if (connection!=null && !connection.isEmpty()){
+        if (connection != null && !connection.isEmpty()) {
             return personRepository.findByConnectionIdInAndUserId(connection, userId, paging);
         }
 

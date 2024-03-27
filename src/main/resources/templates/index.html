@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
     <title>All users</title>
-    <link rel="stylesheet" href="/css/mystyle.css" >
+    <link rel="stylesheet" href="/css/mystyle.css">
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.3/dist/css/bootstrap.css}">
     <link rel="stylesheet" th:href="@{/webjars/bootstrap-icons/1.11.3/font/bootstrap-icons.css}">
 
@@ -20,71 +20,71 @@
         </a>
     </div>
 
-<table class="table table-striped table-hover table-bordered">
-    <thead>
-    <tr>
-        <th scope="col">#</th>
-        <th scope="col">Імʼя</th>
-        <th scope="col">Логін</th>
-        <th scope="col">Пароль</th>
-        <th scope="col">Показати записник</th>
-        <th scope="col"></th>
+    <table class="table table-striped table-hover table-bordered">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Імʼя</th>
+            <th scope="col">Логін</th>
+            <th scope="col">Пароль</th>
+            <th scope="col">Показати записник</th>
+            <th scope="col"></th>
 
-    </tr>
-    </thead>
-    <tbody>
+        </tr>
+        </thead>
+        <tbody>
 
-    <tr th:each="user : ${users}">
-        <td th:text="${user.id}">
-        </td>
-        <td th:text="${user.name}">
-        </td>
-        <td th:text="${user.login}">
-        </td>
-        <td th:text="${user.password}">
-        </td>
-        <td >
-            <a th:href="@{/notebook/user/{user_id}(user_id=${user.id})}" class="btn btn-sm btn-success">
-                Відкрити записну книжку
-            </a>
-        </td>
-        <td>
-            <a th:href="@{/edit/{id}(id=${user.id})}" class="btn btn-sm btn-warning">
-                <i class="bi bi-pencil"></i>
-            </a>
-            <a class="btn btn-sm btn-danger" data-bs-target="#myconfirm" data-bs-toggle="modal"
-                th:attr="data-bs-link=@{/delete(user_id=${user.id})}, data-bs-text=${user.name}, data-bs-id=${user.id}">
-                <i class="bi bi-trash"></i>
-            </a>
-        </td>
-    </tr>
-    </tbody>
-</table>
+        <tr th:each="user : ${users}">
+            <td th:text="${user.id}">
+            </td>
+            <td th:text="${user.name}">
+            </td>
+            <td th:text="${user.login}">
+            </td>
+            <td th:text="${user.password}">
+            </td>
+            <td>
+                <a th:href="@{/notebook/user/{user_id}(user_id=${user.id})}" class="btn btn-sm btn-success">
+                    Відкрити записну книжку
+                </a>
+            </td>
+            <td>
+                <a th:href="@{/edit/{id}(id=${user.id})}" class="btn btn-sm btn-warning">
+                    <i class="bi bi-pencil"></i>
+                </a>
+                <a class="btn btn-sm btn-danger" data-bs-target="#myconfirm" data-bs-toggle="modal"
+                   th:attr="data-bs-link=@{/delete(user_id=${user.id})}, data-bs-text=${user.name}, data-bs-id=${user.id}">
+                    <i class="bi bi-trash"></i>
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
 
-<div class="modal fade" id="myconfirm" data-bs-backdrop="static" data-bs-keyboard="false"
-     tabindex="-1" aria-labelledby="staticWarningLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="staticWarningLabel">Попередження</h1>
-                <button type="button" class="btn-close" aria-label="Close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                Ви впевнені, що хочете видалити цей запис<br/>
-                Якщо ви натиснете видалити, цю дію <i>не можна відмінити</i>.
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Відмінити</button>
-                <a class="btn btn-danger delete-button">Видалити</a>
+    <div class="modal fade" id="myconfirm" data-bs-backdrop="static" data-bs-keyboard="false"
+         tabindex="-1" aria-labelledby="staticWarningLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticWarningLabel">Попередження</h1>
+                    <button type="button" class="btn-close" aria-label="Close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    Ви впевнені, що хочете видалити цей запис<br/>
+                    Якщо ви натиснете видалити, цю дію <i>не можна відмінити</i>.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Відмінити</button>
+                    <a class="btn btn-danger delete-button">Видалити</a>
+                </div>
             </div>
         </div>
     </div>
 </div>
-</div>
 
 <script>
     let myConfirmDialog = document.getElementById('myconfirm')
-    myConfirmDialog.addEventListener('show.bs.modal', function (event){
+    myConfirmDialog.addEventListener('show.bs.modal', function (event) {
         let button = event.relatedTarget
         let link = button.getAttribute('data-bs-link')
         let cid = button.getAttribute('data-bs-id')

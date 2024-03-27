@@ -20,15 +20,15 @@ public class PhoneController {
 
     @PostMapping("/add")
     public String add(@RequestParam(name = "person_id") int personId, Phonenumber phone) {
-        phone.setPerson(personService.getPersonById(personId).orElseThrow( () -> new IllegalArgumentException("Person not found")));
+        phone.setPerson(personService.getPersonById(personId).orElseThrow(() -> new IllegalArgumentException("Person not found")));
         phoneNumberService.addNewPhoneNumber(phone);
-        return "redirect:/notebook/edit/"+personId;
+        return "redirect:/notebook/edit/" + personId;
     }
 
     @GetMapping("/delete")
-    public String delete(@RequestParam(name = "phone_id") int id,@RequestParam(name = "person_id") int personId) {
+    public String delete(@RequestParam(name = "phone_id") int id, @RequestParam(name = "person_id") int personId) {
         phoneNumberService.deletePhone(id);
-        return "redirect:/notebook/edit/"+personId;
+        return "redirect:/notebook/edit/" + personId;
     }
 
 }

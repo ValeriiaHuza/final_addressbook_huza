@@ -1,17 +1,11 @@
 package com.example.final_addressbook_huza.controllers;
 
-
-import com.example.final_addressbook_huza.adapter.PersonAdapter;
-import com.example.final_addressbook_huza.data.Connection;
 import com.example.final_addressbook_huza.data.NoteUser;
 import com.example.final_addressbook_huza.services.NoteUserService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Optional;
 
 @Controller
 @AllArgsConstructor
@@ -44,7 +38,7 @@ public class UserController {
 
     @GetMapping("/edit/{id}")
     public String redirectToEditForm(@PathVariable("id") int id, Model model) {
-        NoteUser user = noteUserService.getUserById(id).orElseThrow( () -> new IllegalArgumentException("User not found"));
+        NoteUser user = noteUserService.getUserById(id).orElseThrow(() -> new IllegalArgumentException("User not found"));
 
         System.out.println(user.getName());
         model.addAttribute("user", user);

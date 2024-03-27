@@ -13,6 +13,7 @@
 
 <div class="container-fluid py-4">
 
+
     <div class="row justify-content-center">
         <div class="col">
             <nav aria-label="breadcrumb" class="bg-light rounded-3 p-3 mb-4">
@@ -26,34 +27,44 @@
     </div>
 
     <div class="row justify-content-center">
+
         <div class="col-lg-6">
             <div class="card mb-4">
                 <div class="card-body">
                     <form id="myform" th:action="@{/notebook/save/{user_id}(user_id=${user.getId()})}"
                           th:object="${person}" method="post">
+
+                        <div id="validationAlert1" class="alert alert-danger alert-dismissible fade show" role="alert" style="display: none;">
+                            <!-- Close button -->
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            <!-- Alert message content -->
+                            <span id="validationMessage"></span>
+                        </div>
+
+
                         <input type="hidden" th:field="*{id}" th:value="${person.id}"/>
                         <div class="mb-3">
-                            <label for="firstName" class="form-label">Ім'я</label>
+                            <label for="firstName" class="form-label"> <i class="bi bi-person mx-1"></i>Ім'я *</label>
                             <input type="text" th:field="*{firstName}" class="form-control" id="firstName" required>
                         </div>
                         <div class="mb-3">
-                            <label for="lastName" class="form-label">Прізвище</label>
+                            <label for="lastName" class="form-label"><i class="bi bi-person mx-1"></i>Прізвище</label>
                             <input type="text" th:field="*{lastName}" class="form-control" id="lastName">
                         </div>
                         <div class="mb-3">
-                            <label for="surname" class="form-label">По-батькові</label>
+                            <label for="surname" class="form-label"><i class="bi bi-person mx-1"></i>По-батькові</label>
                             <input type="text" th:field="*{surname}" class="form-control" id="surname">
                         </div>
                         <div class="mb-3">
-                            <label for="address" class="form-label">Адреса</label>
+                            <label for="address" class="form-label"><i class="bi bi-house mx-1"></i>Адреса</label>
                             <input type="text" th:field="*{address}" class="form-control" id="address">
                         </div>
                         <div class="mb-3">
-                            <label for="email" class="form-label">Email</label>
-                            <input type="email" th:field="*{email}" class="form-control" id="email">
+                            <label for="email" class="form-label"><i class="bi bi-envelope mx-1"></i>Email</label>
+                            <input type="email" th:field="*{email}" class="form-control" id="email" >
                         </div>
                         <div class="mb-3">
-                            <label for="connection" class="form-label" >Тип знайомства</label>
+                            <label for="connection" class="form-label" ><i class="bi bi-person-badge mx-1"></i>Тип знайомства</label>
                             <select th:field="*{connectionId}" class="form-select" id="connection">
                                 <th:block th:each="connection : ${connections}">
                                     <option th:text="${connection.title}" th:value="${connection.id}"></option>
@@ -62,22 +73,28 @@
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label for="personDescription" class="form-label">Персональні характеристики</label>
+                            <label for="personDescription" class="form-label"><i class="bi bi-person-vcard mx-1"></i>Персональні характеристики</label>
                             <textarea class="form-control" th:field="*{personDescription}" id="personDescription"
                                       rows="3"></textarea>
                         </div>
                         <div class="mb-3">
-                            <label for="birthday" class="form-label">День народження</label>
+                            <label for="birthday" class="form-label"><i class="bi bi-calendar-event mx-1"></i>День народження</label>
                             <input type="date" th:field="*{birthday}" class="form-control" id="birthday">
                         </div>
 
                         <div class="mb-3">
+                            <div id="validationAlert2" class="alert alert-danger alert-dismissible fade show" role="alert" style="display: none;">
+                                <!-- Close button -->
+                                <button type="button" id="closeButton2" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                <!-- Alert message content -->
+                                <span id="validationMessage2"></span>
+                            </div>
+
                             <div id="phoneNumbers">
-                                <label for="phoneNumber" class="form-label">Номер телефону</label>
+                                <label for="phoneNumber" class="form-label"><i class="bi bi-phone mx-1"></i>Номер телефону</label>
+                                <small>(Формат: +380XXXXXXXXX)</small>
                                 <div class="phoneInput input-group mb-3">
-                                    <input name="phone" type="tel" class="form-control " id="phoneNumber" required>
-
-
+                                    <input name="phone" type="tel" class="form-control phoneNumber" id="phoneNumber" pattern="^\+380\d{9}$">
                                 </div>
                             </div>
                             <button type="button" class="btn btn-secondary my-1" onclick="addPhoneNumber()">Додати номер
@@ -88,15 +105,15 @@
                         <div class="container mb-3">
                             <div class="card">
                                 <div class="card-header">
-                                    <h5 class="card-title">Освіта</h5>
+                                    <h5 class="card-title mb-0"><i class="bi bi-book mx-1"></i>Освіта</h5>
                                 </div>
                                 <div class="card-body">
                                     <div id="educations">
                                         <div class="education-inputs mb-3">
                                             <input name="educationPlace" type="text" class="form-control mb-3"
-                                                   placeholder="Місце освіти" required>
+                                                   placeholder="Місце освіти">
                                             <input name="specialization" type="text" class="form-control mb-3"
-                                                   placeholder="Спеціалізація" required>
+                                                   placeholder="Спеціалізація">
                                             </div>
                                     </div>
                                     <button type="button" class="btn btn-secondary my-1" onclick="addEducation()">Додати ще одне
@@ -110,15 +127,15 @@
                         <div class="container mb-3">
                             <div class="card">
                                 <div class="card-header">
-                                    <h5 class="card-title">Робота</h5>
+                                    <h5 class="card-title mb-0"><i class="bi bi-briefcase mx-1"></i>Робота</h5>
                                 </div>
                                 <div class="card-body">
                                     <div id="jobs">
                                         <div class="job-inputs mb-3">
                                             <input name="jobPlace" type="text" class="form-control mb-3"
-                                                   placeholder="Місце роботи" required>
+                                                   placeholder="Місце роботи">
                                             <input name="jobVacancy" type="text" class="form-control mb-3"
-                                                   placeholder="Посада" required>
+                                                   placeholder="Посада">
                                         </div>
                                     </div>
                                     <button type="button" class="btn btn-secondary my-1" onclick="addJob()">Додати ще одну
@@ -131,12 +148,14 @@
 
                         <input type="hidden" id="datajson" name="datajson"/>
 
-                        <button onclick="collect()" class="btn btn-primary">Зберегти</button>
+                        <button type="submit" onclick="collect()" class="btn btn-primary">Зберегти</button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
+
+
 </div>
 
 <script>
@@ -188,7 +207,72 @@
         document.getElementById('phoneNumbers').appendChild(numberInputs);
     }
 
+    // Function to display validation message
+    function showValidationAlert(message) {
+        const validationMessage = document.getElementById('validationMessage');
+        validationMessage.textContent = message;
+        document.getElementById('validationAlert1').style.display = 'block';
+    }
+
+    // Function to hide validation message
+    function hideValidationAlert() {
+        document.getElementById('validationAlert1').style.display = 'none';
+    }
+
+    function showValidationAlert2(message) {
+        const validationMessage = document.getElementById('validationMessage2');
+        console.log(validationMessage)
+        validationMessage.textContent = message;
+        document.getElementById('validationAlert2').style.display = 'block';
+    }
+
+    // Function to hide validation message
+    function hideValidationAlert2() {
+        document.getElementById('validationAlert2').style.display = 'none';
+    }
+
+    const closeButton = document.getElementById('validationAlert1').querySelector('.btn-close');
+    closeButton.addEventListener('click', function() {
+        hideValidationAlert(); // Hide the alert when the close button is clicked
+    });
+
+    const closeButton2 = document.getElementById('validationAlert2').querySelector('#closeButton2');
+    closeButton2.addEventListener('click', function() {
+        hideValidationAlert2(); // Hide the alert when the close button is clicked
+    });
+
+    document.getElementById('myform').querySelectorAll('input, select, textarea').forEach(function(input) {
+        input.addEventListener('input', function() {
+            hideValidationAlert(); // Hide validation message when user starts typing
+            hideValidationAlert2()
+        });
+    });
+
     function collect() {
+
+        if (!document.getElementById('myform').checkValidity()){
+
+            if(document.getElementById('firstName').value.trim() === '') {
+                showValidationAlert("Заповніть імʼя! Це обовʼязкове поле");
+                return;
+            }
+
+            if(!document.getElementById('email').checkValidity()) {
+                showValidationAlert("Некорректно введений емейл");
+                return;
+            }
+
+            let phoneInputs = document.querySelectorAll('.phoneNumber');
+            phoneInputs.forEach(function(input) {
+                // Check if the input value matches the pattern
+                if (!input.checkValidity()) {
+                    showValidationAlert2("Некорректно введений номер телефону");
+                }
+            });
+
+            return;
+        }
+
         let phoneNumbers = [];
         let phoneNumberInputs = document.querySelectorAll('input[name="phone"]');
         phoneNumberInputs.forEach(function (input) {

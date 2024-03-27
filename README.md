@@ -34,7 +34,7 @@ Install my-project with npm
 CREATE DATABASE address_book_gfl;
 ```
 
-- **Run SQL Script:** Execute the provided SQL script (```postgresql.sql```) (https://github.com/ValeriiaHuza/final_addressbook_huza.git) against the newly created database to set up the required tables and initial data. 
+- **Run SQL Script:** Execute the provided SQL script (```postgresql.sql```) ([https://github.com/ValeriiaHuza/final_addressbook_huza.git](https://github.com/ValeriiaHuza/final_addressbook_huza/blob/main/postgresql.sql)) against the newly created database to set up the required tables and initial data. 
 
 - **Change Database Configuration:** Open the ```application.yml``` file in the Spring Boot application's ```src/main/resources``` directory. Update the database connection properties ```spring.datasource.url, spring.datasource.username, spring.datasource.password``` to match your PostgreSQL configuration.
     
